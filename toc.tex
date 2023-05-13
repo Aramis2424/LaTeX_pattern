@@ -1,0 +1,71 @@
+\begingroup
+
+\parindent 0pt
+\newlength{\pagewidth}\setlength{\pagewidth}{1.1em}
+
+\newlength{\sectnum}\setlength{\sectnum}{8.4em}
+\newlength{\ssectnum}\setlength{\ssectnum}{1em}
+\newlength{\sssectnum}\setlength{\sssectnum}{2em}
+
+\newlength{\sssectindent}\setlength{\sssectindent}{2em} 
+
+\newcommand*{\entrybody}{%
+    \raggedright%
+    \etocname\nobreak%
+    \leaders\etoctoclineleaders\hfill%
+    \rlap{\makebox[\pagewidth][r]{\etocpage}}%
+    \vspace{0.56em}% хак для отступа
+}
+
+\newlength\lenparboxsect
+\setlength\lenparboxsect\textwidth
+\addtolength\lenparboxsect{-\sectnum}
+\addtolength\lenparboxsect{-\pagewidth}
+
+\newlength\lensectparboxz
+\setlength\lensectparboxz\textwidth
+\addtolength\lensectparboxz{-\pagewidth}
+
+\etocsetstyle{section}
+    {}
+    {\leavevmode\etocifnumbered{\leftskip \sectnum}{\leftskip 0pt}}
+    {\normalsize\etocifnumbered%
+        {\llap{\makebox[\sectnum][l]{ПРИЛОЖЕНИЕ \etocnumber}}%
+            \parbox[t][][t]{\lenparboxsect}{\entrybody}}%
+        {\parbox[t][][t]{\lensectparboxz}{\entrybody}}\par}
+    {}
+
+\newlength\lenparboxsubsect
+\setlength\lenparboxsubsect\textwidth
+\addtolength\lenparboxsubsect{-\ssectnum}
+\addtolength\lenparboxsubsect{-\pagewidth}
+
+\etocsetstyle{subsection}
+    {}
+    {\leavevmode\leftskip \ssectnum}
+    {\normalsize\llap{\makebox[\ssectnum][l]{\etocnumber}}%
+        \parbox[t][][t]{\lenparboxsubsect}{\entrybody}\par}
+    {}
+
+\newlength\lenleftskip
+\setlength\lenleftskip\sssectnum
+\addtolength\lenleftskip{\sssectindent}
+
+\newlength\lenparbox
+\setlength\lenparbox\textwidth
+\addtolength\lenparbox{-\sssectnum}
+\addtolength\lenparbox{-\pagewidth}
+\addtolength\lenparbox{-\sssectindent}
+
+\etocsetstyle{subsubsection}
+    {}
+    {\leavevmode\setlength{\leftskip}{\lenleftskip}\relax}
+    {\normalsize\llap{\makebox[\sssectnum][l]{\etocnumber}}%
+        \parbox[t][][t]{\lenparbox}{\entrybody}\par}
+    {}
+
+\etocsettocstyle{\hidedstructel{СОДЕРЖАНИЕ}}{}
+
+\tableofcontents
+
+\endgroup

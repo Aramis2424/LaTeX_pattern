@@ -1,0 +1,393 @@
+%В основе преамбулы лежит: https://github.com/vpunch/gost732
+\documentclass[a4paper,14pt]{extarticle}
+
+% кодировка
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+
+% поля
+\usepackage[left=30mm,right=15mm,top=20mm,bottom=20mm]{geometry}
+
+% переносы слов
+\usepackage[english,russian]{babel}
+
+% шрифт Таймс
+\usepackage{tempora}
+\usepackage{newtxmath}
+
+% межстрочный интервал
+\usepackage[onehalfspacing]{setspace}
+
+% отступ первой строки
+\usepackage{indentfirst}
+\setlength{\parindent}{1.25cm}
+
+\newcommand{\eline}{%
+	\vspace{\baselineskip}
+}
+
+% содержание
+\usepackage{etoc}
+\setcounter{tocdepth}{3}
+
+% Гиперссылки \toc с кликабельностью
+\usepackage{hyperref}
+
+
+%===================================================================================
+% глубина нумерации разделов
+\setcounter{secnumdepth}{5}
+
+% оформление структурного элемента и приложения
+\usepackage{titlesec}
+\titleformat{\section}
+    [block]                           % форма
+    {\filcenter\bfseries\normalsize}  % формат полностью
+    {ПРИЛОЖЕНИЕ \thesection}          % метка
+    {1em}                             % отступ от метки
+    {}                                % код перед телом
+% счетчик приложений
+\usepackage{totcount}
+\newtotcounter{annexcount}
+% приложение
+\renewcommand{\thesection}{\Asbuk{section}}
+\newcommand{\annex}[1]{%
+    \stepcounter{annexcount}%
+    \setcounter{figure}{0}
+    \setcounter{table}{0}
+    \setcounter{lstlisting}{0}
+    \clearpage
+    \section{#1}%
+}
+ 
+% скрытый структурный элемент
+\newcommand{\hidedstructel}[1]{%
+    \clearpage
+    \section*{#1}%
+}
+% структурный элемент
+\newcommand{\structel}[1]{%
+    \hidedstructel{#1}
+    \addcontentsline{toc}{section}{#1}%
+}
+
+% оформление раздела
+\titleformat{\subsection}[hang]
+{\normalfont\fontsize{16}{10}\bfseries}{\thesubsection}{0.5em}{} % расстояние между № и названием
+\titlespacing\subsection{\parindent}{\parskip}{1.5ex}  % 21 = 14 * 1.5 т.е. полуторный интервал
+\renewcommand{\thesubsection}{\arabic{subsection}}
+% раздел
+\newcommand{\sect}[1]{%
+    \clearpage
+    \setcounter{figure}{0}  % сбросить нумерацию внутри раздела
+    \setcounter{table}{0}
+    \setcounter{lstlisting}{0}
+    \subsection{#1}
+}
+
+% офромление подраздела
+\titleformat{\subsubsection}[hang]
+{\bfseries\normalsize}{\thesubsubsection}{0.5em}{}
+\titlespacing\subsubsection{\parindent}{1ex}{1ex}
+% подраздел
+\usepackage{placeins}
+\newcommand{\subsect}[1]{%
+    \FloatBarrier
+    \subsubsection{#1}
+    \renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
+}
+
+% офрмление пункта
+\titleformat{\paragraph}[runin]
+{\bfseries\normalsize}{\theparagraph}{0.5em}{} 
+\titlespacing\paragraph{\parindent}{1ex}{1ex}
+% пункт
+\newcommand{\parag}{
+    \paragraph{}
+}
+
+% офрмление подпункта
+\titleformat{\subparagraph}[runin]
+{\bfseries\normalsize}{\thesubparagraph}{0.5em}{} 
+\titlespacing\subparagraph{\parindent}{1ex}{1ex}
+% пункт
+\newcommand{\subparag}{
+    \subparagraph{}
+}
+
+%===================================================================================
+% перечисления
+\usepackage{enumitem}
+% общие параметры для списков
+\setlist{
+    topsep=0pt,                   % отступ сверху и снизу списка
+    partopsep=0pt,                % то же самое
+    %leftmargin=0pt,               % отступ слева
+    labelsep=0pt,                 % отступ метки
+    align=left,                 % выравнивание метки
+    listparindent=\parindent,   % отступ первой строки абзаца
+    itemsep=0pt,                  % отступ между элементами
+    parsep=0pt                    % отступ между абзацами и элементами
+}
+% параметры для нумерованных списков
+\setlist[enumerate]{
+    label={\arabic*)},
+    labelwidth=1.4em%,
+    %itemindent=\parindent+\labelwidth
+    \setlength{\itemindent}{\labelwidth}
+}
+% параметры для ненумерованного списка
+\setlist[itemize]{
+    label=--~,  % в списках тире короткое, в тексте - длинное
+    labelwidth=1.2em%,
+    %itemindent=\parindent+\labelwidth
+    \setlength{\itemindent}{\labelwidth}
+}
+% параметры для буквенного списка
+\AddEnumerateCounter*{\asbuk}{\c@asbuk}{7}
+\newlist{asblist}{enumerate}{2}
+\setlist[asblist]{
+    label={\asbuk*)},
+    labelwidth=1.4em%,
+    \setlength{\itemindent}{\labelwidth}
+}
+
+%===================================================================================
+% подписи
+\usepackage[singlelinecheck=false]{caption}
+\DeclareCaptionLabelSeparator{gost}{~---~}
+\captionsetup{labelsep=gost}
+
+% пакет для работы с рисунками
+\usepackage{graphicx}
+\usepackage{chngcntr}
+\graphicspath{{img/}}
+
+% иллюстрация
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+\captionsetup[figure]{justification=centering, labelformat=gostfigure, position=bottom}
+\newcommand{\fig}[3][1]{
+	\renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}\label{#2}
+    \end{figure}
+}
+% font=singlespacing по умолчанию
+%skip=-6pt
+
+\newcommand{\comfig}[3][1]{
+	\renewcommand{\thefigure}{\arabic{figure}}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}\label{#2}
+    \end{figure}
+}
+
+\newcommand{\annexfig}[3][1]{
+	\counterwithin{figure}{section}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}\label{#2}
+    \end{figure}
+}
+%-----------------------------------------------------------------------------------
+% листинг
+\usepackage{listings}
+\usepackage{xcolor}
+% общие правила оформления кода
+\lstset{ %
+	language=c++,   					% выбор языка для подсветки	
+	basicstyle=\small,			% размер и начертание шрифта для подсветки кода
+	numbers=left,						% где поставить нумерацию строк (слева\справа)
+	numberstyle=\small,					% размер шрифта для номеров строк
+	stepnumber=1,						% размер шага между двумя номерами строк
+	numbersep=5pt,						% как далеко отстоят номера строк от подсвечиваемого кода
+	frame=single,						% рисовать рамку вокруг кода
+	tabsize=4,							% размер табуляции по умолчанию равен 4 пробелам
+	captionpos=t,						% позиция заголовка вверху [t] или внизу [b]
+	breaklines=true,					
+	breakatwhitespace=true,				% переносить строки только если есть пробел
+	escapeinside={\#*}{*)},				% если нужно добавить комментарии в коде
+	backgroundcolor=\color{white}
+}
+
+% код в разделе
+\DeclareCaptionLabelFormat{custlisting}{Листинг #2}
+\captionsetup[lstlisting]{justification=raggedright, labelformat=custlisting, position=top}
+\newcommand{\code}[2]{
+	\renewcommand{\thelstlisting}{\thesubsection.\arabic{lstlisting}}
+    \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
+}
+
+% код вне раздела
+\newcommand{\comcode}[2]{
+	\renewcommand{\thelstlisting}{\arabic{lstlisting}}
+    \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
+}
+
+% код в приложении
+\newcommand{\annexcode}[2]{
+	\counterwithin{lstlisting}{section}
+	\renewcommand{\thelstlisting}{\thesection.\arabic{lstlisting}}
+    \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
+}
+
+% Написание кода прямо в документе. Шаблон.
+%\begin{lstlisting}[label=some-code,caption={Это крутой исходный код}]
+%	\renewcommand{\thelstlisting}{\thesection.\arabic{lstlisting}}
+%	<text code>
+%\end{lstlisting}
+% а ещё можно через \VerbatimEnvironment
+
+%-----------------------------------------------------------------------------------
+% таблица
+% формат подписи к таблицы указывать самостоятельно перед begin(\tbl) в формате:
+% \renewcommand{\thetable}{\arabic{table}}
+\newenvironment{tbl}[3]
+{
+    \begin{table}[h]
+        \small
+        \centering
+        \caption{#2}\label{tbl:#1}
+        \begin{tabular}{|#3|}
+            \hline
+}{
+            \hline
+        \end{tabular}
+    \end{table}
+}
+\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+\captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
+
+\usepackage{tabularx}
+
+% объединение строк
+\usepackage{multirow}
+\newcommand{\mr}[2]{\multirow[t]{#1}{=}{#2}}
+
+% колонки
+\usepackage{array}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{N}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% заголовок таблицы
+\usepackage{xparse}
+\NewExpandableDocumentCommand\thead{t< t> O{1} m m}{%
+    \IfBooleanTF{#1}{%
+        \IfBooleanTF{#2}{%
+            \multicolumn{#3}{|M{#4}|}{#5}%
+        }{%
+            \multicolumn{#3}{|M{#4}}{#5}%
+        }
+    }{%
+        \IfBooleanTF{#2}{%
+            \multicolumn{#3}{M{#4}|}{#5}%
+        }{%
+            \multicolumn{#3}{M{#4}}{#5}%
+        }%
+    }%
+}
+
+% длинная таблица
+\usepackage{longtable}
+\newenvironment{longtbl}[3]
+{
+    \small
+    \begin{longtable}{|#3|}
+        \caption{#2}\label{tbl:#1}\\
+        \hline
+}{
+        \hline
+    \end{longtable}
+}
+
+% шаблон таблицы
+%\begin{table}[hbtp]
+%	\begin{center}
+%		\begin{flushleft}
+%			\caption{\label{tab:compare}Классификация существующих методов определения %заимствований в исходных кодах программ}
+%		\end{flushleft}
+%		\begin{tabular}{|l | l | l | l | l | l | l | l |} 
+%			\hline 
+%             ~					& {1}	 &    {2.1} &   {2.2} & {2.3} & {2.4} & {3} & {4} \\ \hline
+%			Текст  & Нет  &   100\%  & 80\%    &  76\%   &  65\%    &  \textbf{80\% }& Нет  \\ \hline
+%			Токены  &  Да &   100\%  &  92\%   & 87\%  &  74\%  &    \textbf{88\% } & Нет  \\ \hline
+%		    Метрики &   Да &   100\%   &  87\%   & 95\%    &  72\%   & \textbf{89\% }& Нет  \\ \hline
+%			Деревья   &   Да &    100\%  &  93\%   &  91\%   &  60\%  &  \textbf{84\%}& Нет  \\ \hline
+%5			Низкоуровневый код &  Да &    99\%  &  100\%   &   85\%   &   80\%  &  \textbf{91\%}& %Да \\  \hline
+%		\end{tabular}
+%	\end{center}
+%\end{table}
+
+%===================================================================================
+% математика и графика
+
+% математика
+\usepackage{amsmath}  % amsmath mathtools
+\numberwithin{equation}{subsection}
+
+% графики
+\usepackage{tikz, pgfplots}
+\pgfplotsset{compat=newest}
+
+\usepackage{adjustbox}
+\usepackage{float}
+\usepackage{url}
+
+%===================================================================================
+% источники
+\usepackage{csquotes}
+\usepackage[%
+    backend=biber,%
+    bibstyle=gost-numeric%
+]{biblatex}
+\addbibresource{bibliography.bib}
+%\addbibresource{biblatex-examples.bib}
+\newcommand{\showbib}{%
+    \structel{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}%
+    \printbibliography[heading=none]%
+}
+
+% отступы в источниках
+\defbibenvironment{bibliography}
+    {\list
+        {}
+        {\setlength{\leftmargin}{0pt}%
+         \setlength{\itemindent}{\parindent}%
+         \setlength{\itemsep}{0pt}%
+         \setlength{\parsep}{0pt}}}
+    {\endlist}
+    {\item
+     \printtext[labelnumberwidth]{%
+        \printfield{labelprefix}%
+        \printfield{labelnumber}%
+     }%
+     \hspace{0.5em}}
+
+% метка без точки
+\DeclareFieldFormat{labelnumberwidth}{#1}
+
+%===================================================================================
+% прочее
+
+% номер последней страницы
+\usepackage{lastpage}
+
+% счетчик источников
+\newtotcounter{bibcount}
+\AtEveryBibitem{
+    \stepcounter{bibcount}%
+}
+% счетчики таблиц и рисунков
+\usepackage{xassoccnt}
+\newtotcounter{tblcount}
+\DeclareAssociatedCounters{table}{tblcount}
+\newtotcounter{figcount}
+\DeclareAssociatedCounters{figure}{figcount}
+
+%===================================================================================
+%===================================================================================

@@ -1,25 +1,54 @@
-%В основе преамбулы лежит: https://github.com/vpunch/gost732
+% В основе преамбулы лежит: https://github.com/vpunch/gost732 (хотя от нее уже мало что осталось)
 \documentclass[a4paper,14pt]{extarticle}
 
-% кодировка
-\usepackage[utf8]{inputenc}
-\usepackage[T2A]{fontenc}
-
-% поля
-\usepackage[left=30mm,right=15mm,top=20mm,bottom=20mm]{geometry}
-
-% переносы слов
-\usepackage[english,russian]{babel}
-
-% шрифт Таймс
-\usepackage{tempora}
-%\usepackage{newtxmath}
-
-% межстрочный интервал
-\usepackage[onehalfspacing]{setspace}
+% Пакеты
+\usepackage[utf8]{inputenc}            % кодировка исходного файла (UTF-8)
+\usepackage[T2A]{fontenc}              % кодировка шрифтов для кириллицы
+\usepackage[%
+	left=30mm,
+	right=15mm,
+	top=20mm,
+	bottom=20mm
+]{geometry} 						   % поля страницы
+\usepackage[english,russian]{babel}    % поддержка русского и английского языков
+\usepackage{tempora}                   % шрифт Tempora (аналог Times)
+\usepackage[onehalfspacing]{setspace}  % полуторный межстрочный интервал
+\usepackage{indentfirst}               % отступ у первого абзаца после заголовков
+\usepackage{etoc}                      % гибкая настройка оглавления
+\usepackage{hyperref}                  % гиперссылки в документе
+\usepackage{titlesec}                  % настройка оформления заголовков
+\usepackage{graphicx}                  % вставка изображений
+\usepackage{geometry}                  % управление геометрией страницы
+\usepackage{titlesec}                  % настройка заголовков (повтор)
+\usepackage{totcount}                  % подсчёт элементов (страниц, рисунков и т.д.)
+\usepackage{placeins}                  % управление размещением float-объектов
+\usepackage{enumitem}                  % настройка списков
+\usepackage[singlelinecheck=false]{caption} % настройка подписей к рисункам и таблицам
+\usepackage{graphicx}                  % работа с графикой (повтор)
+\usepackage{chngcntr}                  % управление нумерацией счётчиков
+\usepackage{listings}                  % оформление исходного кода
+\usepackage{xcolor}                    % расширенная работа с цветами
+\usepackage{caption}                   % подписи к рисункам и таблицам (повтор)
+\usepackage{tabularx}                  % таблицы с автоматической шириной столбцов
+\usepackage{multirow}                  % объединение строк в таблицах
+\usepackage{array}                     % расширенные возможности таблиц
+\usepackage{xparse}                    % удобное создание новых команд
+\usepackage{longtable}                 % таблицы на несколько страниц
+\usepackage{amsmath}                   % расширенные математические формулы
+\usepackage{tikz, pgfplots}            % создание графиков и векторной графики
+\usepackage{adjustbox}                 % масштабирование и выравнивание объектов
+\usepackage{float}                     % расширенное управление float-объектами
+\usepackage{url}                       % корректное отображение URL
+\usepackage{csquotes}                  % умные кавычки и цитирование
+\usepackage{lastpage}                  % ссылка на номер последней страницы
+\usepackage{xassoccnt}                 % ассоциированные счётчики
+\usepackage[%
+    backend=biber,
+    bibstyle=gost-numeric,             % стиль библиографии по ГОСТ
+    sorting=none
+]{biblatex}                            % работа с библиографией
 
 % отступ первой строки
-\usepackage{indentfirst}
 \setlength{\parindent}{1.25cm}
 
 \newcommand{\eline}{%
@@ -27,11 +56,11 @@
 }
 
 % содержание
-\usepackage{etoc}
+%\usepackage{etoc}
 \setcounter{tocdepth}{3}
 
 % Гиперссылки \toc clickable
-\usepackage{hyperref}
+%\usepackage{hyperref}
 \hypersetup{
     colorlinks=true, % false: ссылки в цветных прямоугольниках; true: цветные ссылки
     linkcolor=black,  % цвет внутренних ссылок
@@ -40,17 +69,17 @@
     citecolor=black, % цвет ссылок на библиографию
     linkbordercolor={0 0 0} % цвет прямоугольников вокруг ссылок (чёрный)
 }
-\usepackage{titlesec}
-%\usepackage{tocloft}
+%\usepackage{titlesec}
+%%\usepackage{tocloft}
 \makeatletter
 \renewcommand{\@pnumwidth}{15em} % also try with this commented out
 \makeatother
 
-%\usepackage[normalem]{ulem}
+%%\usepackage[normalem]{ulem}
 
 % вставка pdg страниц (pdfpages несовместима с некоторыми другими пакетами)
-\usepackage{graphicx}
-\usepackage{geometry}
+%\usepackage{graphicx}
+%\usepackage{geometry}
 \newcommand{\inspdf}[2]{%
   \clearpage
   \thispagestyle{empty}% только для этой страницы
@@ -71,7 +100,7 @@
 \setcounter{secnumdepth}{5}
 
 % оформление структурного элемента и приложения
-\usepackage{titlesec}
+%\usepackage{titlesec}
 \titleformat{\section}
     [block]                           % форма
     {\filcenter\bfseries\normalsize}  % формат полностью
@@ -79,7 +108,7 @@
     {1em}                             % отступ от метки
     {}                                % код перед телом
 % счётчик приложений
-\usepackage{totcount}
+%\usepackage{totcount}
 \newtotcounter{annexcount}
 % приложение
 \renewcommand{\thesection}{\Asbuk{section}}
@@ -132,7 +161,7 @@
 {\bfseries\normalsize}{\thesubsubsection}{0.5em}{}
 \titlespacing\subsubsection{\parindent}{1ex}{1ex}
 % подраздел
-\usepackage{placeins}
+%\usepackage{placeins}
 \newcommand{\subsect}[1]{%
     \FloatBarrier
     \subsubsection{#1}
@@ -159,7 +188,7 @@
 
 %===================================================================================
 % перечисления
-\usepackage{enumitem}
+%\usepackage{enumitem}
 % общие параметры для списков
 \setlist{
     topsep=0pt,                   % отступ сверху и снизу списка
@@ -196,13 +225,13 @@
 
 %===================================================================================
 % подписи
-\usepackage[singlelinecheck=false]{caption}
+%\usepackage[singlelinecheck=false]{caption}
 \DeclareCaptionLabelSeparator{gost}{~---~}
 \captionsetup{labelsep=gost}
 
 % пакет для работы с рисунками
-\usepackage{graphicx}
-\usepackage{chngcntr}
+%\usepackage{graphicx}
+%\usepackage{chngcntr}
 \graphicspath{{img/}}
 
 % иллюстрация
@@ -238,8 +267,8 @@
 }
 %-----------------------------------------------------------------------------------
 % листинг
-\usepackage{listings}
-\usepackage{xcolor}
+%\usepackage{listings}
+%\usepackage{xcolor}
 % общие правила оформления кода
 \lstset{ %
 	language=SQL,   					% выбор языка для подсветки	
@@ -307,25 +336,25 @@
 \DeclareCaptionLabelFormat{gosttable}{Таблица #2}
 \captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
 
-\usepackage{caption}
+%\usepackage{caption}
 \captionsetup[table]{labelsep=endash}
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
-\usepackage{tabularx}
+%\usepackage{tabularx}
 
 % объединение строк
-\usepackage{multirow}
+%\usepackage{multirow}
 \newcommand{\mr}[2]{\multirow[t]{#1}{=}{#2}}
 
 % колонки
-\usepackage{array}
+%\usepackage{array}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \newcolumntype{N}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 % заголовок таблицы
-\usepackage{xparse}
+%\usepackage{xparse}
 \NewExpandableDocumentCommand\thead{t< t> O{1} m m}{%
     \IfBooleanTF{#1}{%
         \IfBooleanTF{#2}{%
@@ -343,7 +372,7 @@
 }
 
 % длинная таблица
-\usepackage{longtable}
+%\usepackage{longtable}
 \newenvironment{longtbl}[3]
 {
     \small
@@ -359,25 +388,25 @@
 % математика и графика
 
 % математика
-\usepackage{amsmath}  % amsmath mathtools
+%\usepackage{amsmath}  % amsmath mathtools
 \numberwithin{equation}{subsection}
 
 % графики
-\usepackage{tikz, pgfplots}
+%\usepackage{tikz, pgfplots}
 \pgfplotsset{compat=newest}
 
-\usepackage{adjustbox}
-\usepackage{float}
-\usepackage{url}
+%\usepackage{adjustbox}
+%\usepackage{float}
+%\usepackage{url}
 
 %===================================================================================
 % источники
-\usepackage{csquotes}
-\usepackage[%
-    backend=biber,
-    bibstyle=gost-numeric, % gost-numeric  utf8gost705u.bst ieee
-    sorting=none
-]{biblatex}
+%\usepackage{csquotes}
+%\usepackage[%
+%    backend=biber,
+%    bibstyle=gost-numeric, % gost-numeric  utf8gost705u.bst ieee
+%    sorting=none
+%]{biblatex}
 \addbibresource{bibliography.bib}
 %\addbibresource{biblatex-examples.bib}
 \newcommand{\showbib}{%
@@ -408,7 +437,7 @@
 % прочее
 
 % номер последней страницы
-\usepackage{lastpage}
+%\usepackage{lastpage}
 
 % счётчик источников
 \newtotcounter{bibcount}
@@ -416,7 +445,7 @@
     \stepcounter{bibcount}%
 }
 % счётчики таблиц и рисунков
-\usepackage{xassoccnt}
+%\usepackage{xassoccnt}
 \newtotcounter{tblcount}
 \DeclareAssociatedCounters{table}{tblcount}
 \newtotcounter{figcount}

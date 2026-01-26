@@ -1,6 +1,7 @@
 % В основе преамбулы лежит: https://github.com/vpunch/gost732 (хотя от нее уже мало что осталось)
 \documentclass[a4paper,14pt]{extarticle}
 
+%==================================================================================================
 % Пакеты
 \usepackage[utf8]{inputenc}            % кодировка исходного файла (UTF-8)
 \usepackage[T2A]{fontenc}              % кодировка шрифтов для кириллицы
@@ -48,19 +49,34 @@
     sorting=none
 ]{biblatex}                            % работа с библиографией
 
-% отступ первой строки
-\setlength{\parindent}{1.25cm}
-
-\newcommand{\eline}{%
+%==================================================================================================
+% Собственные команды
+\newcommand{\eline}{%	Конец строки
 	\vspace{\baselineskip}
 }
 
+\newcommand{\emptypage}{%	Пустая страница
+  	\newpage
+	\mbox{}
+	\newpage
+}
+
+\newcommand{\inspdf}[2]{%	% вставка pdg страниц
+  \clearpage
+  \thispagestyle{empty}
+  \newgeometry{margin=0pt}
+  \noindent\includegraphics[page=#2,width=0.99\textwidth]{#1}
+  \restoregeometry
+  \clearpage
+}
+%==================================================================================================
+
+% отступ первой строки
+\setlength{\parindent}{1.25cm}
+
 % содержание
-%\usepackage{etoc}
 \setcounter{tocdepth}{3}
 
-% Гиперссылки \toc clickable
-%\usepackage{hyperref}
 \hypersetup{
     colorlinks=true, % false: ссылки в цветных прямоугольниках; true: цветные ссылки
     linkcolor=black,  % цвет внутренних ссылок
@@ -69,32 +85,11 @@
     citecolor=black, % цвет ссылок на библиографию
     linkbordercolor={0 0 0} % цвет прямоугольников вокруг ссылок (чёрный)
 }
-%\usepackage{titlesec}
-%%\usepackage{tocloft}
+
 \makeatletter
-\renewcommand{\@pnumwidth}{15em} % also try with this commented out
+\renewcommand{\@pnumwidth}{15em}
 \makeatother
 
-%%\usepackage[normalem]{ulem}
-
-% вставка pdg страниц (pdfpages несовместима с некоторыми другими пакетами)
-%\usepackage{graphicx}
-%\usepackage{geometry}
-\newcommand{\inspdf}[2]{%
-  \clearpage
-  \thispagestyle{empty}% только для этой страницы
-  \newgeometry{margin=0pt}%
-  \noindent\includegraphics[page=#2,width=0.99\textwidth]{#1}%
-  \restoregeometry%
-  \clearpage
-}
-
-
-\newcommand{\emptypage}{%
-  	\newpage
-	\mbox{}
-	\newpage
-}
 %===================================================================================
 % глубина нумерации разделов
 \setcounter{secnumdepth}{5}
@@ -308,13 +303,6 @@
 	\renewcommand{\thelstlisting}{\thesection.\arabic{lstlisting}}
     \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
 }
-
-% Написание кода прямо в документе. Шаблон.
-%\begin{lstlisting}[label=some-code,caption={Это крутой исходный код}]
-%	\renewcommand{\thelstlisting}{\thesection.\arabic{lstlisting}}
-%	<text code>
-%\end{lstlisting}
-% а ещё можно через \VerbatimEnvironment
 
 %-----------------------------------------------------------------------------------
 % таблица

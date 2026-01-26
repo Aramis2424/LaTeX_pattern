@@ -175,7 +175,7 @@
 
 %===================================================================================
 % Оформление списков
-% общие параметры для списков
+% Общие параметры для списков
 \setlist{
     topsep=0pt,					% отступ сверху и снизу списка
     partopsep=0pt,				% то же самое
@@ -186,26 +186,23 @@
     itemsep=0pt,				% отступ между элементами
     parsep=0pt					% отступ между абзацами и элементами
 }
-% параметры для нумерованных списков
+% Параметры для нумерованных списков
 \setlist[enumerate]{
     label={\arabic*)},
-    labelwidth=1.4em%,
-    %itemindent=\parindent+\labelwidth
+    labelwidth=1.4em
     \setlength{\itemindent}{\labelwidth}
 }
-% параметры для ненумерованного списка
+% Параметры для ненумерованного списка
 \setlist[itemize]{
-    label=---~,  % в списках тире короткое, в тексте - длинное
-    labelwidth=1.2em%,
-    %itemindent=\parindent+\labelwidth
+    label=---~,  % Длинное тире
+    labelwidth=1.2em
     \setlength{\itemindent}{\labelwidth}
 }
-% параметры для буквенного списка
+% Параметры для буквенного списка
 \AddEnumerateCounter*{\asbuk}{\c@asbuk}{7}
 \newlist{asblist}{enumerate}{2}
 \setlist[asblist]{
     label={\asbuk*)},
-    labelwidth=1.4em%,
     \setlength{\itemindent}{\labelwidth}
 }
 

@@ -20,16 +20,13 @@
 \usepackage{titlesec}                  % настройка оформления заголовков
 \usepackage{graphicx}                  % вставка изображений
 \usepackage{geometry}                  % управление геометрией страницы
-\usepackage{titlesec}                  % настройка заголовков (повтор)
 \usepackage{totcount}                  % подсчёт элементов (страниц, рисунков и т.д.)
 \usepackage{placeins}                  % управление размещением float-объектов
 \usepackage{enumitem}                  % настройка списков
 \usepackage[singlelinecheck=false]{caption} % настройка подписей к рисункам и таблицам
-\usepackage{graphicx}                  % работа с графикой (повтор)
 \usepackage{chngcntr}                  % управление нумерацией счётчиков
 \usepackage{listings}                  % оформление исходного кода
 \usepackage{xcolor}                    % расширенная работа с цветами
-\usepackage{caption}                   % подписи к рисункам и таблицам (повтор)
 \usepackage{tabularx}                  % таблицы с автоматической шириной столбцов
 \usepackage{multirow}                  % объединение строк в таблицах
 \usepackage{array}                     % расширенные возможности таблиц
@@ -70,14 +67,11 @@
   \clearpage
 }
 %==================================================================================================
-
-% отступ первой строки
-\setlength{\parindent}{1.25cm}
-
-% содержание
-\setcounter{tocdepth}{3}
-
-\hypersetup{
+% Настройка параметров оформления
+\setcounter{secnumdepth}{5}		% глубина нумерации разделов
+\setcounter{tocdepth}{3}		% глубина содержание
+\setlength{\parindent}{1.25cm}	% отступ первой строки
+\hypersetup{					% офрмление ссылок
     colorlinks=true, % false: ссылки в цветных прямоугольниках; true: цветные ссылки
     linkcolor=black,  % цвет внутренних ссылок
     filecolor=black, % цвет ссылок на файлы
@@ -91,11 +85,7 @@
 \makeatother
 
 %===================================================================================
-% глубина нумерации разделов
-\setcounter{secnumdepth}{5}
-
-% оформление структурного элемента и приложения
-%\usepackage{titlesec}
+% оформление структурных элементов (Глава, пунктов, приложений ...)
 \titleformat{\section}
     [block]                           % форма
     {\filcenter\bfseries\normalsize}  % формат полностью
@@ -103,7 +93,6 @@
     {1em}                             % отступ от метки
     {}                                % код перед телом
 % счётчик приложений
-%\usepackage{totcount}
 \newtotcounter{annexcount}
 % приложение
 \renewcommand{\thesection}{\Asbuk{section}}
@@ -182,18 +171,17 @@
 }
 
 %===================================================================================
-% перечисления
-%\usepackage{enumitem}
+% Оформление списков
 % общие параметры для списков
 \setlist{
-    topsep=0pt,                   % отступ сверху и снизу списка
-    partopsep=0pt,                % то же самое
-    %leftmargin=0pt,               % отступ слева
-    labelsep=0pt,                 % отступ метки
-    align=left,                 % выравнивание метки
-    listparindent=\parindent,   % отступ первой строки абзаца
-    itemsep=0pt,                  % отступ между элементами
-    parsep=0pt                    % отступ между абзацами и элементами
+    topsep=0pt,					% отступ сверху и снизу списка
+    partopsep=0pt,				% то же самое
+    %leftmargin=0pt,			% отступ слева
+    labelsep=0pt,				% отступ метки
+    align=left,					% выравнивание метки
+    listparindent=\parindent,	% отступ первой строки абзаца
+    itemsep=0pt,				% отступ между элементами
+    parsep=0pt					% отступ между абзацами и элементами
 }
 % параметры для нумерованных списков
 \setlist[enumerate]{
@@ -220,13 +208,10 @@
 
 %===================================================================================
 % подписи
-%\usepackage[singlelinecheck=false]{caption}
 \DeclareCaptionLabelSeparator{gost}{~---~}
 \captionsetup{labelsep=gost}
 
 % пакет для работы с рисунками
-%\usepackage{graphicx}
-%\usepackage{chngcntr}
 \graphicspath{{img/}}
 
 % иллюстрация
@@ -240,8 +225,6 @@
         \caption{#3}\label{#2}
     \end{figure}
 }
-% font=singlespacing по умолчанию
-%skip=-6pt
 
 \newcommand{\comfig}[3][1]{
 	\renewcommand{\thefigure}{\arabic{figure}}
@@ -262,24 +245,22 @@
 }
 %-----------------------------------------------------------------------------------
 % листинг
-%\usepackage{listings}
-%\usepackage{xcolor}
 % общие правила оформления кода
 \lstset{ %
-	language=SQL,   					% выбор языка для подсветки	
-	basicstyle=\small,			% размер и начертание шрифта для подсветки кода
-	numbers=left,						% где поставить нумерацию строк (слева\справа)
-	numberstyle=\small,					% размер шрифта для номеров строк
-	stepnumber=1,						% размер шага между двумя номерами строк
-	numbersep=5pt,						% как далеко отстоят номера строк от подсвечиваемого кода
-	frame=single,						% рисовать рамку вокруг кода
-	tabsize=4,							% размер табуляции по умолчанию равен 4 пробелам
-	captionpos=t,						% позиция заголовка вверху [t] или внизу [b]
-	breaklines=true,					
-	breakatwhitespace=true,				% переносить строки только если есть пробел
-	escapeinside={\#*}{*)},				% если нужно добавить комментарии в коде
-	xleftmargin=2em, % Увеличение левого отступа
-    %framexleftmargin=3.5em, % Увеличение левого отступа для рамки
+	language=SQL,					% выбор языка для подсветки	
+	basicstyle=\small,				% размер и начертание шрифта для подсветки кода
+	numbers=left,					% где поставить нумерацию строк (слева\справа)
+	numberstyle=\small,				% размер шрифта для номеров строк
+	stepnumber=1,					% размер шага между двумя номерами строк
+	numbersep=5pt,					% как далеко отстоят номера строк от подсвечиваемого кода
+	frame=single,					% рисовать рамку вокруг кода
+	tabsize=4,						% размер табуляции по умолчанию равен 4 пробелам
+	captionpos=t,					% позиция заголовка вверху [t] или внизу [b]
+	breaklines=true,
+	breakatwhitespace=true,			% переносить строки только если есть пробел
+	escapeinside={\#*}{*)},			% если нужно добавить комментарии в коде
+	xleftmargin=2em,				% Увеличение левого отступа
+    %framexleftmargin=3.5em,		% Увеличение левого отступа для рамки
 	backgroundcolor=\color{white}
 }
 
@@ -305,7 +286,7 @@
 }
 
 %-----------------------------------------------------------------------------------
-% таблица
+% Оформление таблиц
 % формат подписи к таблицы указывать самостоятельно перед begin(\tbl) в формате:
 % \renewcommand{\thetable}{\arabic{table}}
 \newenvironment{tbl}[3]
@@ -323,21 +304,15 @@
 }
 \DeclareCaptionLabelFormat{gosttable}{Таблица #2}
 \captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
-
-%\usepackage{caption}
 \captionsetup[table]{labelsep=endash}
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
-%\usepackage{tabularx}
-
 % объединение строк
-%\usepackage{multirow}
 \newcommand{\mr}[2]{\multirow[t]{#1}{=}{#2}}
 
 % колонки
-%\usepackage{array}
 \newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
 \newcolumntype{N}[1]{>{\raggedright\arraybackslash}p{#1}}
 

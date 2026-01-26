@@ -27,8 +27,8 @@
 \usepackage{placeins}                  % управление размещением float-объектов
 \usepackage{enumitem}                  % настройка списков
 \usepackage[singlelinecheck=false]{caption} % настройка подписей к рисункам и таблицам
-\usepackage{chngcntr}                  % управление нумерацией счётчиков
 \usepackage{listings}                  % оформление исходного кода
+\usepackage{chngcntr}                  % управление нумерацией счётчиков
 \usepackage{xcolor}                    % расширенная работа с цветами
 \usepackage{tabularx}                  % таблицы с автоматической шириной столбцов
 \usepackage{multirow}                  % объединение строк в таблицах
@@ -69,11 +69,15 @@
   \restoregeometry
   \clearpage
 }
+
 %===================================================================================
 % Настройка параметров оформления
 \setcounter{secnumdepth}{5}		% глубина нумерации разделов
+
 \setcounter{tocdepth}{3}		% глубина содержание
+
 \setlength{\parindent}{1.25cm}	% отступ первой строки
+
 \hypersetup{					% офрмление ссылок
     colorlinks=true, % false: ссылки в цветных прямоугольниках; true: цветные ссылки
     linkcolor=black,  % цвет внутренних ссылок
@@ -83,24 +87,34 @@
     linkbordercolor={0 0 0} % цвет прямоугольников вокруг ссылок (чёрный)
 }
 
-\makeatletter
-\renewcommand{\@pnumwidth}{15em}
-\makeatother
+%===================================================================================
+% Хуки и более тонкая настройка
+\AddToHook{cmd/subsection/before}{\clearpage} % Раздел с новой страницы
+\AddToHook{cmd/subsubsection/before}{\FloatBarrier} % Барьер для рисунков, таблиц перед подразделом
+
+% Сброс счетчиков внутри раздела
+\AtBeginDocument{%
+  \counterwithin{figure}{subsection}
+  \counterwithin{table}{subsection}
+  \counterwithin{lstlisting}{subsection}
+}
 
 %===================================================================================
-% Оформление структурных элементов (глава, пунктов, приложений ...)
+% Оформление структурных элементов (глава, пунктов, приложений, ...)
+%-----------------------------------------------------------------------------------
+% Приложение
 \titleformat{\section}
     [block]                           % форма
     {\filcenter\bfseries\normalsize}  % формат полностью
     {ПРИЛОЖЕНИЕ \thesection}          % метка
-    {1em}                             % отступ от метки
+    {0.5em}                           % отступ от метки
     {}                                % код перед телом
-% счётчик приложений
-\newtotcounter{annexcount}
-% приложение
+\newtotcounter{appendXcount} % счётчик приложений
+
+% Приложение с названием \appendX
 \renewcommand{\thesection}{\Asbuk{section}}
-\newcommand{\annex}[1]{%
-    \stepcounter{annexcount}%
+\newcommand{\appendX}[1]{%
+    \stepcounter{appendXcount}%
     \setcounter{figure}{0}
     \setcounter{table}{0}
     \setcounter{lstlisting}{0}
@@ -108,70 +122,56 @@
     \section{#1}%
 }
 
-% приложение без названия
-\newcommand{\annexIdx}{%
-    \stepcounter{annexcount}%
+% Приложеним без названия \appendXn
+\newcommand{\appendXn}{%
+    \stepcounter{appendXcount}%
     \setcounter{figure}{0}%
     \setcounter{table}{0}%
     \setcounter{lstlisting}{0}%
     \clearpage
-    \section{\hspace{-0.1pt}}%
+    \section{\hspace{-0.5pt}}%
 }
- 
-% скрытый структурный элемент
+
+%-----------------------------------------------------------------------------------
+% Структурный элемент, не попадающий в содержание
 \newcommand{\hidedstructel}[1]{%
     \clearpage
     \section*{#1}%
 }
-% структурный элемент
+
+% Структурный элемент
 \newcommand{\structel}[1]{%
     \hidedstructel{#1}
     \addcontentsline{toc}{section}{#1}%
 }
+%-----------------------------------------------------------------------------------
+% Оформление раздела
+\titleformat{\subsection}[hang]			% hang -- после название раздела с новой строки, runin -- на той же
+{\normalfont\fontsize{18}{21}\bfseries\centering}
+{\thesubsection}{0.5em}{}				% расстояние между № и названием (21 = 14 * 1.5 === полуторный интервал)
+\titlespacing\subsection{\parindent}{\parskip}{1.5ex}
+\renewcommand{\thesubsection}{\arabic{subsection}}	% Оформление нумерации разделов
+% Раздел \subsection{}
 
-% оформление раздела
-\titleformat{\subsection}[hang]
-{\normalfont\fontsize{18}{10}\bfseries\centering}{\thesubsection}{0.5em}{} % расстояние между № и названием
-\titlespacing\subsection{\parindent}{\parskip}{1.5ex}  % 21 = 14 * 1.5 === полуторный интервал
-\renewcommand{\thesubsection}{\arabic{subsection}}
-% раздел
-\newcommand{\sect}[1]{%
-    \clearpage
-    \setcounter{figure}{0}  % сбросить нумерацию внутри раздела
-    \setcounter{table}{0}
-    \setcounter{lstlisting}{0}
-    \subsection{#1}
-}
-
-% оформление подраздела
+%-----------------------------------------------------------------------------------
+% Оформление подраздела
 \titleformat{\subsubsection}[hang]
 {\bfseries\normalsize}{\thesubsubsection}{0.5em}{}
 \titlespacing\subsubsection{\parindent}{1ex}{1ex}
-% подраздел
-%\usepackage{placeins}
-\newcommand{\subsect}[1]{%
-    \FloatBarrier
-    \subsubsection{#1}
-    \renewcommand{\theparagraph}{\thesubsubsection.\arabic{paragraph}}
-}
+% Подраздел \subsubsection{}
 
-% оформление пункта
-\titleformat{\paragraph}[runin]
+%-----------------------------------------------------------------------------------
+% Оформление пункта
+\titleformat{\paragraph}[hang]
 {\bfseries\normalsize}{\theparagraph}{0.5em}{} 
 \titlespacing\paragraph{\parindent}{1ex}{1ex}
-% пункт
-\newcommand{\parag}{
-    \paragraph{}
-}
+% Пункт \paragraph{}
 
-% оформление подпункта
-\titleformat{\subparagraph}[runin]
+% Оформление подпункта
+\titleformat{\subparagraph}[hang]
 {\bfseries\normalsize}{\thesubparagraph}{0.5em}{} 
 \titlespacing\subparagraph{\parindent}{1ex}{1ex}
-% пункт
-\newcommand{\subparag}{
-    \subparagraph{}
-}
+% Подпункт \subparagraph{}
 
 %===================================================================================
 % Оформление списков
@@ -238,7 +238,7 @@
     \end{figure}
 }
 
-\newcommand{\annexfig}[3][1]{
+\newcommand{\appendXfig}[3][1]{
 	\counterwithin{figure}{section}
     \begin{figure}[h]
         \centering
@@ -282,7 +282,7 @@
 }
 
 % код в приложении
-\newcommand{\annexcode}[2]{
+\newcommand{\appendXcode}[2]{
 	\counterwithin{lstlisting}{section}
 	\renewcommand{\thelstlisting}{\thesection.\arabic{lstlisting}}
     \lstinputlisting[breaklines, caption=#2, label=#1]{#1}

@@ -99,20 +99,24 @@
   \counterwithin{lstlisting}{subsection}
 }
 
-% Оформление подписей к рисункам
+% Оформление подписей к рисункам и таблицам с длинным тире
 \DeclareCaptionLabelSeparator{gost}{~---~}
 \captionsetup{labelsep=gost}
+
+% Оформление подписей к рисункам
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+\captionsetup[figure]{justification=centering, labelformat=gostfigure, position=bottom}
 
 %===================================================================================
 % Оформление структурных элементов (глава, пунктов, приложений, ...)
 %-----------------------------------------------------------------------------------
 % Приложение
 \titleformat{\section}
-    [block]                           % форма
-    {\filcenter\bfseries\normalsize}  % формат полностью
-    {ПРИЛОЖЕНИЕ \thesection}          % метка
-    {0.5em}                           % отступ от метки
-    {}                                % код перед телом
+    [block]								% форма
+    {\filcenter\bfseries\normalsize}	% формат полностью
+    {ПРИЛОЖЕНИЕ \thesection}			% метка
+    {0.5em}								% отступ от метки
+    {}									% код перед телом
 \newtotcounter{appendXcount} % счётчик приложений
 
 % Приложение с названием \appendX
@@ -215,8 +219,6 @@
 \graphicspath{{img/}}
 
 % иллюстрация
-\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
-\captionsetup[figure]{justification=centering, labelformat=gostfigure, position=bottom}
 \newcommand{\fig}[3][1]{
 	\renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
     \begin{figure}[h]

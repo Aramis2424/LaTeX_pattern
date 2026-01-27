@@ -217,23 +217,27 @@
     itemsep=0pt,				% отступ между элементами
     parsep=0pt					% отступ между абзацами и элементами
 }
+
 % Параметры для нумерованных списков
 \setlist[enumerate]{
     label={\arabic*)},
     labelwidth=1.4em
     \setlength{\itemindent}{\labelwidth}
 }
+
 % Параметры для ненумерованного списка
 \setlist[itemize]{
     label=---~,  % Длинное тире
     labelwidth=1.2em
     \setlength{\itemindent}{\labelwidth}
 }
+
 % Параметры для буквенного списка
 \AddEnumerateCounter*{\asbuk}{\c@asbuk}{7}
 \newlist{asblist}{enumerate}{2}
 \setlist[asblist]{
     label={\asbuk*)},
+	labelwidth=1.4em
     \setlength{\itemindent}{\labelwidth}
 }
 

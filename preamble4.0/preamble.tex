@@ -230,7 +230,7 @@
 \graphicspath{{img/}} % Директория по умолчанию
 
 % Рисунок в разделе
-\NewDocumentCommand{\Fig}{ O{1} m m }{% [размер] файл/lable подпись
+\NewDocumentCommand{\Fig}{ O{1} m m }{% [размер] файл/label подпись
     \counterwithin{figure}{subsection}%
     \begin{figure}[!htbp]
         \centering
@@ -289,7 +289,7 @@
 }
 
 % Листинг в разделе
-\NewDocumentCommand{\Code}{ O{C} m m m }{% [язык] файл lable подпись
+\NewDocumentCommand{\Code}{ O{C} m m m }{% [язык] файл label подпись
     \counterwithin{lstlisting}{subsection}%
     \lstinputlisting[
         language=#1,
@@ -327,7 +327,7 @@
 % Для генерации таблиц использовать сайт https://tablesgenerator.com
 
 % Таблица в разделе
-\NewDocumentCommand{\Table}{ m m m }{% таблица lable подпись
+\NewDocumentCommand{\Table}{ m m m }{% таблица label подпись
     \counterwithin{table}{subsection}%
     \begin{table}[!htbp]
         \centering

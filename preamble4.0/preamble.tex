@@ -80,12 +80,12 @@
 \setlength{\parindent}{1.25cm}	% отступ первой строки
 
 \hypersetup{					% офрмление ссылок
-    colorlinks=true, % false: ссылки в цветных прямоугольниках; true: цветные ссылки
-    linkcolor=black,  % цвет внутренних ссылок
-    filecolor=black, % цвет ссылок на файлы
-    urlcolor=black,   % цвет URL-ссылок
-    citecolor=black, % цвет ссылок на библиографию
-    linkbordercolor={0 0 0} % цвет прямоугольников вокруг ссылок (чёрный)
+    colorlinks=true,		% false: ссылки в цветных прямоугольниках; true: цветные ссылки
+    linkcolor=black,		% цвет внутренних ссылок
+    filecolor=black,		% цвет ссылок на файлы
+    urlcolor=black,			% цвет URL-ссылок
+    citecolor=black,		% цвет ссылок на библиографию
+    linkbordercolor={0 0 0}	% цвет прямоугольников вокруг ссылок (чёрный)
 }
 
 %===================================================================================
@@ -166,30 +166,41 @@
 }
 %-----------------------------------------------------------------------------------
 % Оформление раздела
-\titleformat{\subsection}[hang]			% hang -- после название раздела с новой строки, runin -- на той же
-{\normalfont\fontsize{18}{21}\bfseries\centering}
-{\thesubsection}{0.5em}{}				% расстояние между № и названием (21 = 14 * 1.5 === полуторный интервал)
-\titlespacing\subsection{\parindent}{\parskip}{1.5ex}
-\renewcommand{\thesubsection}{\arabic{subsection}}	% Оформление нумерации разделов
+\titleformat{\subsection}[hang]						% hang -- после название раздела с новой строки, runin -- на той же
+  {\normalfont\fontsize{18}{21}\bfseries\centering}	% (21 = 14 * 1.5 === полуторный интервал)
+  {\thesubsection}
+  {0.5em}											% расстояние между № и названием
+  {}				
+\titlespacing\subsection{\parindent}{\parskip}{1.5ex}	% отступы заголовка
+\renewcommand{\thesubsection}{\arabic{subsection}}		% Оформление нумерации разделов
 % Раздел \subsection{}
 
 %-----------------------------------------------------------------------------------
 % Оформление подраздела
 \titleformat{\subsubsection}[hang]
-{\bfseries\normalsize}{\thesubsubsection}{0.5em}{}
-\titlespacing\subsubsection{\parindent}{1ex}{1ex}
+  {\bfseries\normalsize}	% стиль заголовка
+  {\thesubsubsection}		% как отображается номер секции
+  {0.5em}					% отступ между номером и названием
+  {}						% код перед названием (например, "§ ")
+
 % Подраздел \subsubsection{}
 
 %-----------------------------------------------------------------------------------
 % Оформление пункта
 \titleformat{\paragraph}[hang]
-{\bfseries\normalsize}{\theparagraph}{0.5em}{} 
-\titlespacing\paragraph{\parindent}{1ex}{1ex}
+  {\bfseries\normalsize}
+  {\theparagraph}
+  {0.5em}
+  {}
+\titlespacing\paragraph{\parindent}{1ex}{1ex} % Настройка отступов (слева, сверху, снизу)
 % Пункт \paragraph{}
 
 % Оформление подпункта
 \titleformat{\subparagraph}[hang]
-{\bfseries\normalsize}{\thesubparagraph}{0.5em}{} 
+  {\bfseries\normalsize}
+  {\thesubparagraph}
+  {0.5em}
+  {}
 \titlespacing\subparagraph{\parindent}{1ex}{1ex}
 % Подпункт \subparagraph{}
 

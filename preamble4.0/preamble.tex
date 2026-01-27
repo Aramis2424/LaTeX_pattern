@@ -216,35 +216,46 @@
 
 %===================================================================================
 % Оформление рисунков
-\graphicspath{{img/}}
 
-% иллюстрация
-\newcommand{\fig}[3][1]{
-	\renewcommand{\thefigure}{\thesubsection.\arabic{figure}}
-    \begin{figure}[h]
+\graphicspath{{img/}} % Директория по умолчанию
+
+% Рисунок в разделе
+\NewDocumentCommand{\Fig}{ O{1} m m }{%
+    \counterwithin{figure}{subsection}%
+    \begin{figure}[!htbp]
         \centering
         \includegraphics[width=#1\textwidth]{#2}
-        \caption{#3}\label{#2}
+        \caption{#3}
+        \label{fig:#2}
     \end{figure}
 }
+% \Fig[0.8]{label01}{Подпись}
 
-\newcommand{\comfig}[3][1]{
-	\renewcommand{\thefigure}{\arabic{figure}}
-    \begin{figure}[h]
+% Рисунок со сквозной нумерацией
+\NewDocumentCommand{\GlobalFig}{ O{1} m m }{%
+    \counterwithout{figure}{subsection}%
+    \counterwithout{figure}{section}%
+    \begin{figure}[!htbp]
         \centering
         \includegraphics[width=#1\textwidth]{#2}
-        \caption{#3}\label{#2}
+        \caption{#3}
+        \label{fig:#2}
     \end{figure}
 }
+%\GlobalFig{label02}{Подпись}
 
-\newcommand{\appendXfig}[3][1]{
-	\counterwithin{figure}{section}
-    \begin{figure}[h]
+% Рисунок в приложении
+\NewDocumentCommand{\AppendixFig}{ O{1} m m }{%
+    \counterwithin{figure}{section}%
+    \begin{figure}[!htbp]
         \centering
         \includegraphics[width=#1\textwidth]{#2}
-        \caption{#3}\label{#2}
+        \caption{#3}
+        \label{fig:#2}
     \end{figure}
 }
+% \AppendixFig{label03}{Подпись}
+
 %-----------------------------------------------------------------------------------
 % листинг
 % общие правила оформления кода
@@ -417,3 +428,16 @@
 
 %===================================================================================
 %===================================================================================
+
+% Шаблоны
+
+\iffalse
+% Шаблон рисунка
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth, angle=90]{img/filename}
+    \caption{Название рисунка}
+    \label{fig:example}
+\end{figure}
+%
+\fi

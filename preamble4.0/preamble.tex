@@ -225,7 +225,7 @@
 \graphicspath{{img/}} % Директория по умолчанию
 
 % Рисунок в разделе
-\NewDocumentCommand{\Fig}{ O{1} m m }{%
+\NewDocumentCommand{\Fig}{ O{1} m m }{% [размер] файл/lable подпись
     \counterwithin{figure}{subsection}%
     \begin{figure}[!htbp]
         \centering
@@ -284,7 +284,7 @@
 }
 
 % Листинг в разделе
-\NewDocumentCommand{\Code}{ O{C} m m m }{%
+\NewDocumentCommand{\Code}{ O{C} m m m }{% [язык] файл lable подпись
     \counterwithin{lstlisting}{subsection}%
     \lstinputlisting[
         language=#1,

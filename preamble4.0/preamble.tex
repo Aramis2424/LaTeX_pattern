@@ -373,6 +373,56 @@
     \end{table}
 }
 
+%-----------------------------------------------------------------------------------
+% Те же команды, но для длинных страниц
+
+% Таблица в разделе
+\makeatletter
+\NewDocumentCommand{\TableL}{ m m m }{% colspec, label, caption
+    \counterwithin{table}{subsection}%
+    \begin{longtable}{#1}
+        \caption{#3}\label{tab:#2} \\
+        \endfirsthead
+
+        \multicolumn{\LT@cols}{@{}p{\linewidth}}%
+        {Продолжение таблицы \ref{tab:#2}}\\
+		\hline
+        \endhead
+}
+\makeatother
+
+
+% Таблица со сквозной нумерацией
+\makeatletter
+\NewDocumentCommand{\GlobalTableL}{ m m m }{% colspec, label, caption
+    \counterwithout{table}{subsection}%
+    \counterwithout{table}{section}%
+    \begin{longtable}{#1}
+        \caption{#3}\label{tab:#2} \\
+        \endfirsthead
+
+        \multicolumn{\LT@cols}{@{}p{\linewidth}}%
+        {Продолжение таблицы \ref{tab:#2}}\\
+		\hline
+        \endhead
+}
+\makeatother
+
+% Таблица в приложении
+\makeatletter
+\NewDocumentCommand{\AppendixTableL}{ m m m }{% colspec, label, caption
+    \counterwithin{table}{section}%
+    \begin{longtable}{#1}
+        \caption{#3}\label{tab:#2} \\
+        \endfirsthead
+
+        \multicolumn{\LT@cols}{@{}p{\linewidth}}%
+        {Продолжение таблицы \ref{tab:#2}}\\
+		\hline
+        \endhead
+}
+\makeatother
+
 %===================================================================================
 % Оформление математических формул
 % Для генерации формул использовать сайт https://latexeditor.lagrida.com
@@ -469,6 +519,7 @@
 \end{figure}
 %
 \fi
+
 %-----------------------------------------------------------------------------------
 \iffalse
 % Шаблон листинга
@@ -492,6 +543,7 @@ print(factorial(5))
 \end{lstlisting}
 %
 \fi
+
 %-----------------------------------------------------------------------------------
 \iffalse
 % Шаблон таблицы
@@ -502,6 +554,23 @@ print(factorial(5))
 ? & 4543                                                                     & \multicolumn{2}{l|}{Тогда жизнь определенно удалась} \\ \hline
 \end{tabular}
 }{t1}{Пример таблицы в разделе}
+%
+\fi
+
+%-----------------------------------------------------------------------------------
+\iffalse
+% Шаблон длинной таблицы
+\AppendixTableL{|l|c|r|}{params}{Параметры системы}
+\hline
+№ & Параметр & Значение \\
+\hline
+1 & Скорость & 10 \\ \hline
+2 & Масса & 20 \\ \hline
+3 & Время & 30 \\ \hline
+4 & Давление & 40 \\ \hline
+5 & Температура & 50 \\ \hline
+% ... сколько угодно строк
+\end{longtable}
 %
 \fi
 %-----------------------------------------------------------------------------------

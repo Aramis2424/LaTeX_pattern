@@ -6,48 +6,49 @@
 
 %===================================================================================
 % Пакеты
-\usepackage[utf8]{inputenc}            % кодировка исходного файла (UTF-8)
-\usepackage[T2A]{fontenc}              % кодировка шрифтов для кириллицы
+\usepackage[utf8]{inputenc}						% кодировка исходного файла (UTF-8)
+\usepackage[T2A]{fontenc}						% кодировка шрифтов для кириллицы
 \usepackage[%
 	left=30mm,
 	right=15mm,
 	top=20mm,
 	bottom=20mm
-]{geometry} 						   % поля страницы
-\usepackage[english,russian]{babel}    % поддержка русского и английского языков
-\usepackage{tempora}                   % шрифт Tempora (аналог Times)
-\usepackage[onehalfspacing]{setspace}  % полуторный межстрочный интервал
-\usepackage{indentfirst}               % отступ у первого абзаца после заголовков
-\usepackage{etoc}                      % гибкая настройка оглавления
-\usepackage{hyperref}                  % гиперссылки в документе
-\usepackage{titlesec}                  % настройка оформления заголовков
-\usepackage{graphicx}                  % вставка изображений
-\usepackage{geometry}                  % управление геометрией страницы
-\usepackage{totcount}                  % подсчёт элементов (страниц, рисунков и т.д.)
-\usepackage{placeins}                  % управление размещением float-объектов
-\usepackage{enumitem}                  % настройка списков
-\usepackage[singlelinecheck=false]{caption} % настройка подписей к рисункам и таблицам
-\usepackage{listings}                  % оформление исходного кода
-\usepackage{chngcntr}                  % управление нумерацией счётчиков
-\usepackage{xcolor}                    % расширенная работа с цветами
-\usepackage{tabularx}                  % таблицы с автоматической шириной столбцов
-\usepackage{multirow}                  % объединение строк в таблицах
-\usepackage{array}                     % расширенные возможности таблиц
-\usepackage{xparse}                    % удобное создание новых команд
-\usepackage{longtable}                 % таблицы на несколько страниц
-\usepackage{amsmath}                   % расширенные математические формулы
-\usepackage{tikz, pgfplots}            % создание графиков и векторной графики
-\usepackage{adjustbox}                 % масштабирование и выравнивание объектов
-\usepackage{float}                     % расширенное управление float-объектами
-\usepackage{url}                       % корректное отображение URL
-\usepackage{csquotes}                  % умные кавычки и цитирование
-\usepackage{lastpage}                  % ссылка на номер последней страницы
-\usepackage{xassoccnt}                 % ассоциированные счётчики
+]{geometry}										% поля страницы
+\usepackage[english,russian]{babel}				% поддержка русского и английского языков
+\usepackage{tempora}							% шрифт Tempora (аналог Times)
+\usepackage[onehalfspacing]{setspace}			% полуторный межстрочный интервал
+\usepackage{indentfirst}						% отступ у первого абзаца после заголовков
+\usepackage{etoc}								% гибкая настройка оглавления
+\usepackage{hyperref}							% гиперссылки в документе
+\usepackage{titlesec}							% настройка оформления заголовков
+\usepackage{graphicx}							% вставка изображений
+\usepackage{geometry}							% управление геометрией страницы
+\usepackage{totcount}							% подсчёт элементов (страниц, рисунков и т.д.)
+\usepackage{placeins}							% управление размещением float-объектов
+\usepackage{enumitem}							% настройка списков
+\usepackage[singlelinecheck=false]{caption}		% настройка подписей к рисункам и таблицам
+\usepackage{listings}							% оформление исходного кода
+\usepackage{chngcntr}							% управление нумерацией счётчиков
+\usepackage{xcolor}								% расширенная работа с цветами
+\usepackage{tabularx}							% таблицы с автоматической шириной столбцов
+\usepackage{multirow}							% объединение строк в таблицах
+\usepackage{array}								% расширенные возможности таблиц
+\usepackage{xparse}								% удобное создание новых команд
+\usepackage{longtable}							% таблицы на несколько страниц
+\usepackage{amsmath}							% расширенные математические формулы
+\usepackage{tikz, pgfplots}						% создание графиков и векторной графики
+\usepackage{adjustbox}							% масштабирование и выравнивание объектов
+\usepackage{float}								% расширенное управление float-объектами
+\usepackage{url}								% корректное отображение URL
+\usepackage{csquotes}							% умные кавычки и цитирование
+\usepackage{lastpage}							% ссылка на номер последней страницы
+\usepackage{xassoccnt}							% ассоциированные счётчики
+\usepackage{booktabs}							% красивые горизонтальные линии
 \usepackage[%
     backend=biber,
-    bibstyle=gost-numeric,             % стиль библиографии по ГОСТ
+    bibstyle=gost-numeric,						% стиль библиографии по ГОСТ
     sorting=none
-]{biblatex}                            % работа с библиографией
+]{biblatex}										% работа с библиографией
 
 %===================================================================================
 % Собственные команды

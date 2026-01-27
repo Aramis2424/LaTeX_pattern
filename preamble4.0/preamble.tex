@@ -221,15 +221,17 @@
 % Параметры для нумерованных списков
 \setlist[enumerate]{
     label={\arabic*)},
-    labelwidth=1.4em
-    \setlength{\itemindent}{\labelwidth}
+    labelwidth=-0.5em,	% ширина маркера
+    labelsep=0.5em,	% расстояние между маркером и текстом
+    leftmargin=1.25cm
 }
 
 % Параметры для ненумерованного списка
 \setlist[itemize]{
-    label=---~,  % Длинное тире
-    labelwidth=1.2em
-    \setlength{\itemindent}{\labelwidth}
+    label=---~,		% длинное тире
+    labelwidth=-0.5em,	% ширина маркера
+    labelsep=0.5em,	% расстояние между маркером и текстом
+    leftmargin=1.25cm
 }
 
 % Параметры для буквенного списка
@@ -237,8 +239,9 @@
 \newlist{asblist}{enumerate}{2}
 \setlist[asblist]{
     label={\asbuk*)},
-	labelwidth=1.4em
-    \setlength{\itemindent}{\labelwidth}
+	labelwidth=-0.5em,	% ширина маркера
+    labelsep=0.5em,	% расстояние между маркером и текстом
+    leftmargin=1.25cm
 }
 
 %===================================================================================

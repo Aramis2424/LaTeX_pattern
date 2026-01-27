@@ -113,6 +113,10 @@
 \DeclareCaptionLabelFormat{custlisting}{Листинг #2}
 \captionsetup[lstlisting]{justification=raggedright, labelformat=custlisting, position=top}
 
+% Оформление подписей к таблицам
+\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+\captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
+
 %===================================================================================
 % Оформление структурных элементов (глава, пунктов, приложений, ...)
 %-----------------------------------------------------------------------------------
@@ -318,66 +322,42 @@
 }
 % \AppendixCode{file.c}{label01}{Подпись}
 
-%-----------------------------------------------------------------------------------
+%===================================================================================
 % Оформление таблиц
-% формат подписи к таблицы указывать самостоятельно перед begin(\tbl) в формате:
-% \renewcommand{\thetable}{\arabic{table}}
-\newenvironment{tbl}[3]
-{
-    \begin{table}[h]
-        \small
+% Для генерации таблиц использовать сайт https://tablesgenerator.com
+
+% Таблица в разделе
+\NewDocumentCommand{\Table}{ m m m }{% таблица lable подпись
+    \counterwithin{table}{subsection}%
+    \begin{table}[!htbp]
         \centering
-        \caption{#2}\label{tbl:#1}
-        \begin{tabular}{|#3|}
-            \hline
-}{
-            \hline
-        \end{tabular}
+		\caption{#3}
+        #1
+        \label{tab:#2}
     \end{table}
 }
-\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
-\captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
-\captionsetup[table]{labelsep=endash}
 
-\newcommand{\specialcell}[2][c]{%
-  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
-
-% объединение строк
-\newcommand{\mr}[2]{\multirow[t]{#1}{=}{#2}}
-
-% колонки
-\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
-\newcolumntype{N}[1]{>{\raggedright\arraybackslash}p{#1}}
-
-% заголовок таблицы
-%\usepackage{xparse}
-\NewExpandableDocumentCommand\thead{t< t> O{1} m m}{%
-    \IfBooleanTF{#1}{%
-        \IfBooleanTF{#2}{%
-            \multicolumn{#3}{|M{#4}|}{#5}%
-        }{%
-            \multicolumn{#3}{|M{#4}}{#5}%
-        }
-    }{%
-        \IfBooleanTF{#2}{%
-            \multicolumn{#3}{M{#4}|}{#5}%
-        }{%
-            \multicolumn{#3}{M{#4}}{#5}%
-        }%
-    }%
+% Таблица со сквозной нумерацией
+\NewDocumentCommand{\GlobalTable}{ m m m }{%
+    \counterwithout{table}{subsection}%
+    \counterwithout{table}{section}%
+    \begin{table}[!htbp]
+        \centering
+		\caption{#3}
+        #1
+        \label{tab:#2}
+    \end{table}
 }
 
-% длинная таблица
-%\usepackage{longtable}
-\newenvironment{longtbl}[3]
-{
-    \small
-    \begin{longtable}{|#3|}
-        \caption{#2}\label{tbl:#1}\\
-        \hline
-}{
-        \hline
-    \end{longtable}
+% Таблица в приложении
+\NewDocumentCommand{\AppendixTable}{ m m m }{%
+    \counterwithin{table}{section}%
+    \begin{table}[!htbp]
+        \centering
+		\caption{#3}
+        #1
+        \label{tab:#2}
+    \end{table}
 }
 
 %===================================================================================
@@ -469,5 +449,17 @@
         caption={Подпись},
         label={lst:code01}
     ]{code/file.c}
+%
+\fi
+
+\iffalse
+% Шаблон таблицы
+\Table{
+\begin{tabular}{|l|l|ll|}
+\hline
+№ & \begin{tabular}[c]{@{}l@{}}Возможность\\ Многострочных фраз\end{tabular} & \multicolumn{1}{l|}{1}              & 2              \\ \hline
+? & 4543                                                                     & \multicolumn{2}{l|}{Тогда жизнь определенно удалась} \\ \hline
+\end{tabular}
+}{t1}{Пример таблицы в разделе}
 %
 \fi

@@ -117,6 +117,9 @@
 \DeclareCaptionLabelFormat{gosttable}{Таблица #2}
 \captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
 
+% Оформление нумерации списка источников
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+
 %===================================================================================
 % Оформление структурных элементов (глава, пунктов, приложений, ...)
 %-----------------------------------------------------------------------------------
@@ -127,7 +130,6 @@
     {ПРИЛОЖЕНИЕ \thesection}			% метка
     {0.5em}								% отступ от метки
     {}									% код перед телом
-\newtotcounter{appendXcount} % счётчик приложений
 
 % Приложение с названием \appendX
 \renewcommand{\thesection}{\Asbuk{section}}
@@ -396,15 +398,10 @@
 % \AppendixEq{f1}{a^2 + b^2 = c^2}
 
 %===================================================================================
-% источники
-%\usepackage{csquotes}
-%\usepackage[%
-%    backend=biber,
-%    bibstyle=gost-numeric, % gost-numeric  utf8gost705u.bst ieee
-%    sorting=none
-%]{biblatex}
-\addbibresource{bibliography.bib}
-%\addbibresource{biblatex-examples.bib}
+% Оформление списка литературы
+
+\addbibresource{bibliography.bib} % Файл со списком источников
+
 \newcommand{\showbib}{%
     \structel{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}%
     \printbibliography[heading=none]%
@@ -426,25 +423,25 @@
      }%
      \hspace{0.5em}}
 
-% метка без точки
-\DeclareFieldFormat{labelnumberwidth}{#1.}
-
 %===================================================================================
-% прочее
+% Счётчики
 
-% номер последней страницы
-%\usepackage{lastpage}
-
-% счётчик источников
+% Счётчик источников
 \newtotcounter{bibcount}
 \AtEveryBibitem{
     \stepcounter{bibcount}%
 }
-% счётчики таблиц и рисунков
+
+% Счётчики таблиц
 \newtotcounter{tblcount}
 \DeclareAssociatedCounters{table}{tblcount}
+
+% Счётчики рисунков
 \newtotcounter{figcount}
 \DeclareAssociatedCounters{figure}{figcount}
+
+% Счётчик приложений
+\newtotcounter{appendXcount} % счётчик приложений
 
 %===================================================================================
 %===================================================================================

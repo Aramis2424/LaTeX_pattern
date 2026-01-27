@@ -99,6 +99,7 @@
   \counterwithin{lstlisting}{subsection}
 }
 
+%-----------------------------------------------------------------------------------
 % Оформление подписей к рисункам и таблицам с длинным тире
 \DeclareCaptionLabelSeparator{gost}{~---~}
 \captionsetup{labelsep=gost}
@@ -106,6 +107,10 @@
 % Оформление подписей к рисункам
 \DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
 \captionsetup[figure]{justification=centering, labelformat=gostfigure, position=bottom}
+
+% Оформление подписей к листингам
+\DeclareCaptionLabelFormat{custlisting}{Листинг #2}
+\captionsetup[lstlisting]{justification=raggedright, labelformat=custlisting, position=top}
 
 %===================================================================================
 % Оформление структурных элементов (глава, пунктов, приложений, ...)
@@ -256,11 +261,12 @@
 }
 % \AppendixFig{label03}{Подпись}
 
-%-----------------------------------------------------------------------------------
-% листинг
-% общие правила оформления кода
+%===================================================================================
+% Оформление листинга
+
+% Общие правила оформления кода
 \lstset{ %
-	language=SQL,					% выбор языка для подсветки	
+	language=C,						% выбор языка для подсветки	
 	basicstyle=\small,				% размер и начертание шрифта для подсветки кода
 	numbers=left,					% где поставить нумерацию строк (слева\справа)
 	numberstyle=\small,				% размер шрифта для номеров строк
@@ -277,26 +283,39 @@
 	backgroundcolor=\color{white}
 }
 
-% код в разделе
-\DeclareCaptionLabelFormat{custlisting}{Листинг #2}
-\captionsetup[lstlisting]{justification=raggedright, labelformat=custlisting, position=top}
-\newcommand{\code}[2]{
-	\renewcommand{\thelstlisting}{\thesubsection.\arabic{lstlisting}}
-    \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
+% Листинг в разделе
+\NewDocumentCommand{\Code}{ O{C} m m m }{%
+    \counterwithin{lstlisting}{subsection}%
+    \lstinputlisting[
+        language=#1,
+        caption={#4},
+        label={lst:#3}
+    ]{#2}
 }
+% \Code{file.c}{label01}{Подпись}
 
-% код вне раздела
-\newcommand{\comcode}[2]{
-	\renewcommand{\thelstlisting}{\arabic{lstlisting}}
-    \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
+% Листинг со сквозной нумерацией
+\NewDocumentCommand{\GlobalCode}{ O{C} m m m }{%
+    \counterwithout{lstlisting}{subsection}%
+    \counterwithout{lstlisting}{section}%
+    \lstinputlisting[
+        language=#1,
+        caption={#4},
+        label={lst:#3}
+    ]{#2}
 }
+% \GlobalCode[java]{file.java}{label01}{Подпись}
 
-% код в приложении
-\newcommand{\appendXcode}[2]{
-	\counterwithin{lstlisting}{section}
-	\renewcommand{\thelstlisting}{\thesection.\arabic{lstlisting}}
-    \lstinputlisting[breaklines, caption=#2, label=#1]{#1}
+%Листинг в приложении
+\NewDocumentCommand{\AppendixCode}{ O{C} m m m }{%
+    \counterwithin{lstlisting}{section}%
+    \lstinputlisting[
+        language=#1,
+        caption={#4},
+        label={lst:#3}
+    ]{#2}
 }
+% \AppendixCode{file.c}{label01}{Подпись}
 
 %-----------------------------------------------------------------------------------
 % Оформление таблиц
@@ -439,5 +458,15 @@
     \caption{Название рисунка}
     \label{fig:example}
 \end{figure}
+%
+\fi
+
+\iffalse
+% Шаблон листинга
+\lstinputlisting[
+        language=C,
+        caption={Подпись},
+        label={lst:code01}
+    ]{code/file.c}
 %
 \fi

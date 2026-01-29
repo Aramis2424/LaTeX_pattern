@@ -1,1 +1,0 @@
-Remove-Item *.aux, *.log, *toc, *.bbl, *.bcf, *.blg, *.out, *.xml, *.gz, *.dvi

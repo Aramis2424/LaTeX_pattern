@@ -1,0 +1,101 @@
+\begingroup
+
+\parindent 0pt
+\newlength{\pagewidth}\setlength{\pagewidth}{1.7em}
+
+%========================= Расстояние(номер, Название) ==============
+\newlength{\sectnum}\setlength{\sectnum}{8.4em}
+\newlength{\ssectnum}\setlength{\ssectnum}{1em}
+\newlength{\sssectnum}\setlength{\sssectnum}{2em}
+\newlength{\ssssectnum}\setlength{\ssssectnum}{40pt} % 3em
+
+%========================= Расстояние(Левый клай, Номер) ==============
+\newlength{\sssectindent}\setlength{\sssectindent}{2.6em} 
+%\newlength{\ssssectindent}\setlength{\ssssectindent}{3em} 
+
+%========================= Общий стиль ==============
+\newcommand*{\entrybody}{%
+    \etocname\nobreak%
+    \leaders\etoctoclineleaders\hfill%
+    \rlap{\makebox[\pagewidth][r]{\etocpage}}%
+    \vspace{0.56em}% хак для отступа (межстрочный интервал)
+}
+
+%========================= Приложение ==============
+\newlength\lenparboxsect
+\setlength\lenparboxsect\textwidth
+\addtolength\lenparboxsect{-\sectnum}
+\addtolength\lenparboxsect{-\pagewidth}
+
+\newlength\lensectparboxz
+\setlength\lensectparboxz\textwidth
+\addtolength\lensectparboxz{-\pagewidth}
+
+\etocsetstyle{section}
+    {}
+    {\leavevmode\etocifnumbered{\leftskip \sectnum}{\leftskip 0pt}}
+    {\normalsize\etocifnumbered%
+        {\llap{\makebox[\sectnum][l]{ПРИЛОЖЕНИЕ \etocnumber}}%
+            \parbox[t][][t]{\lenparboxsect}{\entrybody}}%
+        {\parbox[t][][t]{\lensectparboxz}{\entrybody}}\par}
+    {}
+
+%========================= sect ==============
+\newlength\lenparboxsubsect	% === Расстояние(Номер страницы, правый край)
+\setlength\lenparboxsubsect\textwidth
+\addtolength\lenparboxsubsect{-\ssectnum}
+\addtolength\lenparboxsubsect{-\pagewidth}
+
+\etocsetstyle{subsection}
+    {}
+    {\leavevmode\leftskip \ssectnum}
+    {\normalsize\llap{\makebox[\ssectnum][l]{\etocnumber}}%
+        \parbox[t][][t]{\lenparboxsubsect}{\entrybody}\par}
+    {}
+    
+%========================= subsect ==============
+\newlength\lenleftskip % === Расстояние(Левый край, номер раздела)
+\setlength\lenleftskip\sssectnum
+\addtolength\lenleftskip{\sssectindent}
+\addtolength\lenleftskip{-1em}
+
+\newlength\lenparbox	% === Расстояние(Номер страницы, правый край)
+\setlength\lenparbox\textwidth
+\addtolength\lenparbox{-\sssectnum}
+\addtolength\lenparbox{-\pagewidth}
+\addtolength\lenparbox{-\sssectindent}
+\addtolength\lenparbox{1em}
+
+\etocsetstyle{subsubsection}
+    {}
+    {\leavevmode\setlength{\leftskip}{\lenleftskip}\relax}
+    {\normalsize\llap{\makebox[\sssectnum][l]{\etocnumber}}%
+        \parbox[t][][t]{\lenparbox}{\entrybody}\par}
+    {}
+%%%%%%%%%%%%% parag to toc %%%%%%%%%%%%%%%%%%%%  ssssectnum
+
+%========================= parag ==============
+\newlength\lenleftParag % === Расстояние(Левый край, номер раздела)
+\setlength\lenleftParag\ssssectnum
+\addtolength\lenleftParag{\sssectindent}
+%\addtolength\lenleftskip{-1em}
+
+\newlength\lenparboxparag	% === Расстояние(Номер страницы, правый край)
+\setlength\lenparboxparag\textwidth
+\addtolength\lenparboxparag{-\ssssectnum}
+\addtolength\lenparboxparag{-\pagewidth}
+\addtolength\lenparboxparag{-\sssectindent}
+%\addtolength\lenparboxparag{1em}
+
+\etocsetstyle{paragraph}
+    {}
+    {\leavevmode\setlength{\leftskip}{\lenleftParag}\relax}    % начало номера заголовка
+    {\normalsize\llap{\makebox[\ssssectnum][l]{\etocnumber}}%  % начало названия заголовка
+        \parbox[t][][t]{\lenparboxparag}{\entrybody}\par}	   % конец страницы заголовка
+    {}
+
+\etocsettocstyle{\hidedstructel{СОДЕРЖАНИЕ}}{}
+
+\tableofcontents
+
+\endgroup

@@ -26,6 +26,8 @@
 \usepackage{totcount}							% подсчёт элементов (страниц, рисунков и т.д.)
 \usepackage{placeins}							% управление размещением float-объектов
 \usepackage{pdfpages}							% вставка pdf страниц
+\usepackage[normalem]{ulem}						% стилизация подчеркиваний
+\usepackage{microtype}							% тонкая стилизация текста
 \usepackage{enumitem}							% настройка списков
 \usepackage{minted}								% продвинутый листинг
 \usepackage[singlelinecheck=false]{caption}		% настройка подписей к рисункам и таблицам
@@ -51,7 +53,6 @@
     bibstyle=gost-numeric,						% стиль библиографии по ГОСТ
     sorting=none
 ]{biblatex}										% работа с библиографией
-
 %===================================================================================
 % Собственные команды
 \newcommand{\eline}{%	Конец строки
@@ -81,7 +82,7 @@
 
 \setlength{\parindent}{1.25cm}	% отступ первой строки
 
-\hypersetup{					% офрмление ссылок
+\hypersetup{				% офрмление ссылок
     colorlinks=true,		% false: ссылки в цветных прямоугольниках; true: цветные ссылки
     linkcolor=black,		% цвет внутренних ссылок
     filecolor=black,		% цвет ссылок на файлы
@@ -232,7 +233,7 @@
 \setlist[itemize]{
     label=---~,		% длинное тире
     labelwidth=-0.5em,	% ширина маркера
-    labelsep=0.5em,	% расстояние между маркером и текстом
+    labelsep=0.25em,	% расстояние между маркером и текстом
     leftmargin=1.25cm
 }
 
@@ -486,9 +487,9 @@
 % Формула в разделе
 \NewDocumentCommand{\Eq}{ m m }{% label формула
     \counterwithin{equation}{subsection}%
-	\label{eq:#1}
     \begin{equation}
-    #2
+		\label{eq:#1}
+		#2
     \end{equation}
 }
 % \Eq{f1}{E = mc^2}
@@ -497,9 +498,9 @@
 \NewDocumentCommand{\GlobalEq}{ m m }{%
     \counterwithout{equation}{subsection}%
     \counterwithout{equation}{section}%
-    \label{eq:#1}
     \begin{equation}
-    #2
+		\label{eq:#1}
+		#2
     \end{equation}
 }
 % \GlobalEq{f1}{\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}}
@@ -507,9 +508,9 @@
 % Формула в приложении
 \NewDocumentCommand{\AppendixEq}{ m m }{%
     \counterwithin{equation}{section}%
-    \label{eq:#1}
     \begin{equation}
-    #2
+		\label{eq:#1}
+		#2
     \end{equation}
 }
 % \AppendixEq{f1}{a^2 + b^2 = c^2}

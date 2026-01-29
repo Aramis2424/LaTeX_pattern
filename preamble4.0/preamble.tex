@@ -611,74 +611,88 @@ print(factorial(5))
 \renewcommand\theFancyVerbLine{\scriptsize\arabic{FancyVerbLine}}
 
 
-% Определение команды \mylisting
-% [auto counter]        — автоматическая нумерация листингов
-% [number within=section] — нумерация вида <section>.<listing>
-% Аргументы:
-%   #1 — язык (java, python, sql и т.п.)
-%   #2 — путь к файлу с кодом
-%   #3 — заголовок листинга
-%   #4 — label (без префикса lst:)
-\newtcbinputlisting[auto counter,number within=section]{\mylisting}[4][]{
-  enhanced,						% включает расширенные возможности tcolorbox
-  before skip=10pt,				% вертикальный отступ перед листингом
-  arc=0mm,						% прямые углы рамки (без скруглений)
-  boxrule=1pt,					% толщина рамки
-  listing only,					% внутри только листинг, без текста
-  listing file={#2},			% файл с исходным кодом
-  listing engine=minted,		% используем minted как движок подсветки
-  minted language=#1,			% язык подсветки
-  minted options = {
-    linenos,					% нумерация строк
-	xleftmargin=5pt,
-    breaklines=true,			% перенос длинных строк
-    fontsize=\small\ttfamily,	% размер и семейство шрифта
-    numbersep=1.5mm,			% расстояние между номерами строк и кодом
-    firstnumber=1,				% начальный номер строки
-	style=bw
-  },
-  colback=white,				% цвет фона
-  colframe=black,				% цвет рамки
-  breakable,					% разрешить перенос листинга на несколько страниц
-  title={\strut Листинг \thetcbcounter{} --- #3},
-  attach boxed title to top left,
-  boxed title style={
+
+\tcbset{
+  mylisting base/.style={
     enhanced,
-    sharp corners,
-    boxrule=0pt,
-    boxsep=0pt,
-    left=0pt,
-    right=0pt,
+    before skip=10pt,
+    arc=0mm,
+    boxrule=1pt,
+    listing only,
+    listing engine=minted,
+    minted options={
+      linenos,
+      xleftmargin=5pt,
+      breaklines=true,
+      fontsize=\small\ttfamily,
+      numbersep=1.5mm,
+      style=bw
+    },
+    colback=white,
+    colframe=black,
+    breakable,
+    title={\strut \tcbtitletext}, % только плейсхолдер
+    attach boxed title to top left,
+    boxed title style={
+      enhanced,
+      sharp corners,
+      boxrule=0pt,
+      boxsep=0pt,
+      left=0pt,
+      right=0pt,
+      top=0pt,
+      bottom=0pt
+    },
     top=0pt,
-    bottom=0pt
-  },
-  top=0pt,
-  bottom=0pt,
-  coltitle=black,				% цвет текста заголовка
-  colbacktitle=white,			% фон заголовка
-  % Поведение рамки и подписи при переносе на несколько страниц
-  % Первая страница листинга
-  overlay first={
-    \draw[line width=.5pt]
-      (frame.south west)--(frame.south east);	% нижняя линия
-  },
-  % Промежуточные страницы
-  overlay middle={
-    \draw[line width=.5pt]
-      (frame.south west)--(frame.south east);	% нижняя линия
-    \draw[line width=.5pt]
-      (frame.north west)--(frame.north east);	% верхняя линия
-    \node[anchor=south west]
-      at (frame.north west)
-      {\hspace{-0.4em}Продолжение листинга \thetcbcounter};
-  },
-  % Последняя страница
-  overlay last={
-    \draw[line width=.5pt]
-      (frame.north west)--(frame.north east); % верхняя линия
-    \node[anchor=south west]
-      at (frame.north west)
-      {\hspace{-0.4em}Продолжение листинга \thetcbcounter};
-  },
-  label=lst:#4					% метка для \ref
+    bottom=0pt,
+    coltitle=black,
+    colbacktitle=white,
+    overlay first={
+      \draw[line width=.5pt] (frame.south west)--(frame.south east);
+    },
+    overlay middle={
+      \draw[line width=.5pt] (frame.south west)--(frame.south east);
+      \draw[line width=.5pt] (frame.north west)--(frame.north east);
+      \node[anchor=south west,inner sep=0pt] at (frame.north west)
+          {Продолжение листинга \thetcbcounter};
+    },
+    overlay last={
+      \draw[line width=.5pt] (frame.north west)--(frame.north east);
+      \node[anchor=south west,inner sep=0pt] at (frame.north west)
+          {Продолжение листинга \thetcbcounter};
+    }
+  }
+}
+
+
+\newtcbinputlisting[
+  auto counter,
+  number within=section
+]{\mylistingS}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #3},
+  label=lst:#4
+}
+
+\newtcbinputlisting[
+  auto counter,
+  number within=subsection
+]{\mylistingSS}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #3},
+  label=lst:#4
+}
+
+\newtcbinputlisting[
+  auto counter
+]{\mylistingN}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #3},
+  label=lst:#4
 }

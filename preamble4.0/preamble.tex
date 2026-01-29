@@ -640,11 +640,8 @@ print(factorial(5))
   colback=white,				% цвет фона
   colframe=black,				% цвет рамки
   breakable,					% разрешить перенос листинга на несколько страниц
-  title={\strut Листинг \thetcbcounter{} — #3},
-  attach boxed title to top left={
-    xshift=0pt,
-    yshift=0pt
-  },
+  title={\strut Листинг \thetcbcounter{} --- #3},
+  attach boxed title to top left,
   boxed title style={
     enhanced,
     sharp corners,
@@ -655,7 +652,8 @@ print(factorial(5))
     top=0pt,
     bottom=0pt
   },
-  before upper={\vspace{\tcboxedtitleheight}},
+  top=0pt,
+  bottom=0pt,
   coltitle=black,				% цвет текста заголовка
   colbacktitle=white,			% фон заголовка
   % Поведение рамки и подписи при переносе на несколько страниц

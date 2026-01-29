@@ -291,58 +291,97 @@
 %===================================================================================
 % Оформление листинга
 
-% Общие правила оформления кода
-\lstset{ %
-	language=C,						% выбор языка для подсветки	
-	basicstyle=\small,				% размер и начертание шрифта для подсветки кода
-	numbers=left,					% где поставить нумерацию строк (слева\справа)
-	numberstyle=\small,				% размер шрифта для номеров строк
-	stepnumber=1,					% размер шага между двумя номерами строк
-	numbersep=5pt,					% как далеко отстоят номера строк от подсвечиваемого кода
-	frame=single,					% рисовать рамку вокруг кода
-	tabsize=4,						% размер табуляции по умолчанию равен 4 пробелам
-	captionpos=t,					% позиция заголовка вверху [t] или внизу [b]
-	breaklines=true,
-	breakatwhitespace=true,			% переносить строки только если есть пробел
-	escapeinside={\#*}{*)},			% если нужно добавить комментарии в коде
-	xleftmargin=2em,				% Увеличение левого отступа
-    %framexleftmargin=3.5em,		% Увеличение левого отступа для рамки
-	backgroundcolor=\color{white}
+% Общий стиль
+\RequirePackage[listings]{tcolorbox}
+\tcbuselibrary{listings,breakable,minted,skins}
+% Уменьшаем размер номеров строк (FancyVerbLine используется minted'ом)
+\renewcommand\theFancyVerbLine{\scriptsize\arabic{FancyVerbLine}}
+\tcbset{
+  mylisting base/.style={
+    enhanced,
+    before skip=10pt,
+    arc=0mm,
+    boxrule=1pt,
+    listing only,
+    listing engine=minted,
+    minted options={
+      linenos,
+      xleftmargin=5pt,
+      breaklines=true,
+      fontsize=\small\ttfamily,
+      numbersep=1.5mm,
+      style=bw
+    },
+    colback=white,
+    colframe=black,
+    breakable,
+    title={\strut \tcbtitletext}, % только плейсхолдер
+    attach boxed title to top left,
+    boxed title style={
+      enhanced,
+      sharp corners,
+      boxrule=0pt,
+      boxsep=0pt,
+      left=0pt,
+      right=0pt,
+      top=0pt,
+      bottom=0pt
+    },
+    top=0pt,
+    bottom=0pt,
+    coltitle=black,
+    colbacktitle=white,
+    overlay first={
+      \draw[line width=.5pt] (frame.south west)--(frame.south east);
+    },
+    overlay middle={
+      \draw[line width=.5pt] (frame.south west)--(frame.south east);
+      \draw[line width=.5pt] (frame.north west)--(frame.north east);
+      \node[anchor=south west,inner sep=0pt] at (frame.north west)
+          {Продолжение листинга \thetcbcounter};
+    },
+    overlay last={
+      \draw[line width=.5pt] (frame.north west)--(frame.north east);
+      \node[anchor=south west,inner sep=0pt] at (frame.north west)
+          {Продолжение листинга \thetcbcounter};
+    }
+  }
 }
 
-% Листинг в разделе
-\NewDocumentCommand{\Code}{ O{C} m m m }{% [язык] файл label подпись
-    \counterwithin{lstlisting}{subsection}%
-    \lstinputlisting[
-        language=#1,
-        caption={#4},
-        label={lst:#3}
-    ]{#2}
+\newtcbinputlisting[% язык файл label подпись
+  auto counter,
+  number within=subsection
+]{\Code}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #4},
+  label=lst:#3
 }
-% \Code{file.c}{label01}{Подпись}
+% \Code[java]{code/main.java}{L1}{Пример простой функции}
 
-% Листинг со сквозной нумерацией
-\NewDocumentCommand{\GlobalCode}{ O{C} m m m }{%
-    \counterwithout{lstlisting}{subsection}%
-    \counterwithout{lstlisting}{section}%
-    \lstinputlisting[
-        language=#1,
-        caption={#4},
-        label={lst:#3}
-    ]{#2}
+\newtcbinputlisting[
+  auto counter
+]{\GlobalCode}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #4},
+  label=lst:#3
 }
-% \GlobalCode[java]{file.java}{label01}{Подпись}
+% \GlobalCode[java]{code/main.java}{L1}{Пример простой функции}
 
-%Листинг в приложении
-\NewDocumentCommand{\AppendixCode}{ O{C} m m m }{%
-    \counterwithin{lstlisting}{section}%
-    \lstinputlisting[
-        language=#1,
-        caption={#4},
-        label={lst:#3}
-    ]{#2}
+\newtcbinputlisting[
+  auto counter,
+  number within=section
+]{\AppendixCode}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #4},
+  label=lst:#3
 }
-% \AppendixCode{file.c}{label01}{Подпись}
+% \AppendixCode[java]{code/main.java}{L1}{Пример простой функции}
 
 %===================================================================================
 % Оформление таблиц
@@ -550,14 +589,10 @@
 
 \iffalse
 % Шаблон листинга (без файла)
-\begin{lstlisting}
-def factorial(n):
-    if n == 0:
-        return 1
-    else:
-        return n * factorial(n-1)
-print(factorial(5))
-\end{lstlisting}
+\begin{minted}[linenos,breaklines,style=algol_nu]{python}
+def hello():
+    print("Hello, world!")
+\end{minted}
 %
 \fi
 
@@ -591,108 +626,3 @@ print(factorial(5))
 %
 \fi
 %-----------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-% Подключаем tcolorbox с поддержкой листингов
-% listings — для совместимости, minted — для подсветки через Pygments
-\RequirePackage[listings]{tcolorbox}
-\tcbuselibrary{listings,breakable,minted,skins}
-
-% Уменьшаем размер номеров строк (FancyVerbLine используется minted'ом)
-\renewcommand\theFancyVerbLine{\scriptsize\arabic{FancyVerbLine}}
-
-
-
-\tcbset{
-  mylisting base/.style={
-    enhanced,
-    before skip=10pt,
-    arc=0mm,
-    boxrule=1pt,
-    listing only,
-    listing engine=minted,
-    minted options={
-      linenos,
-      xleftmargin=5pt,
-      breaklines=true,
-      fontsize=\small\ttfamily,
-      numbersep=1.5mm,
-      style=bw
-    },
-    colback=white,
-    colframe=black,
-    breakable,
-    title={\strut \tcbtitletext}, % только плейсхолдер
-    attach boxed title to top left,
-    boxed title style={
-      enhanced,
-      sharp corners,
-      boxrule=0pt,
-      boxsep=0pt,
-      left=0pt,
-      right=0pt,
-      top=0pt,
-      bottom=0pt
-    },
-    top=0pt,
-    bottom=0pt,
-    coltitle=black,
-    colbacktitle=white,
-    overlay first={
-      \draw[line width=.5pt] (frame.south west)--(frame.south east);
-    },
-    overlay middle={
-      \draw[line width=.5pt] (frame.south west)--(frame.south east);
-      \draw[line width=.5pt] (frame.north west)--(frame.north east);
-      \node[anchor=south west,inner sep=0pt] at (frame.north west)
-          {Продолжение листинга \thetcbcounter};
-    },
-    overlay last={
-      \draw[line width=.5pt] (frame.north west)--(frame.north east);
-      \node[anchor=south west,inner sep=0pt] at (frame.north west)
-          {Продолжение листинга \thetcbcounter};
-    }
-  }
-}
-
-
-\newtcbinputlisting[
-  auto counter,
-  number within=section
-]{\mylistingS}[4][]{
-  mylisting base,
-  minted language=#1,
-  listing file={#2},
-  title={\strut Листинг \thetcbcounter{} --- #3},
-  label=lst:#4
-}
-
-\newtcbinputlisting[
-  auto counter,
-  number within=subsection
-]{\mylistingSS}[4][]{
-  mylisting base,
-  minted language=#1,
-  listing file={#2},
-  title={\strut Листинг \thetcbcounter{} --- #3},
-  label=lst:#4
-}
-
-\newtcbinputlisting[
-  auto counter
-]{\mylistingN}[4][]{
-  mylisting base,
-  minted language=#1,
-  listing file={#2},
-  title={\strut Листинг \thetcbcounter{} --- #3},
-  label=lst:#4
-}

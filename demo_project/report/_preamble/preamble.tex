@@ -1,0 +1,634 @@
+% В основе преамбулы лежит: https://github.com/vpunch/gost732 (хотя от нее уже мало что осталось)
+% Для запуска использовать 
+%	pdflatex.exe -synctex=1 -interaction=nonstopmode -shell-escape "%.tex"
+%	biber.exe "%"
+%	pdflatex.exe -synctex=1 -interaction=nonstopmode -shell-escape "%.tex"
+%===================================================================================
+%===================================================================================
+
+\documentclass[a4paper,14pt]{extarticle}
+
+%===================================================================================
+% Пакеты
+\usepackage[utf8]{inputenc}						% кодировка исходного файла (UTF-8)
+\usepackage[T2A]{fontenc}						% кодировка шрифтов для кириллицы
+\usepackage[%
+	left=30mm,
+	right=15mm,
+	top=20mm,
+	bottom=20mm
+]{geometry}										% поля страницы
+\usepackage[english,russian]{babel}				% поддержка русского и английского языков
+\usepackage{tempora}							% шрифт Tempora (аналог Times)
+\usepackage[onehalfspacing]{setspace}			% полуторный межстрочный интервал
+\usepackage{indentfirst}						% отступ у первого абзаца после заголовков
+\usepackage{etoc}								% гибкая настройка оглавления
+\usepackage{hyperref}							% гиперссылки в документе
+\usepackage{titlesec}							% настройка оформления заголовков
+\usepackage{graphicx}							% вставка изображений
+\usepackage{geometry}							% управление геометрией страницы
+\usepackage{totcount}							% подсчёт элементов (страниц, рисунков и т.д.)
+\usepackage{placeins}							% управление размещением float-объектов
+\usepackage{pdfpages}							% вставка pdf страниц
+\usepackage[normalem]{ulem}						% стилизация подчеркиваний
+\usepackage{microtype}							% тонкая стилизация текста
+\usepackage{enumitem}							% настройка списков
+\usepackage{minted}								% продвинутый листинг
+\usepackage[singlelinecheck=false]{caption}		% настройка подписей к рисункам и таблицам
+\usepackage{listings}							% оформление исходного кода
+\usepackage{chngcntr}							% управление нумерацией счётчиков
+\usepackage{xcolor}								% расширенная работа с цветами
+\usepackage{tabularx}							% таблицы с автоматической шириной столбцов
+\usepackage{multirow}							% объединение строк в таблицах
+\usepackage{array}								% расширенные возможности таблиц
+\usepackage{xparse}								% удобное создание новых команд
+\usepackage{longtable}							% таблицы на несколько страниц
+\usepackage{amsmath}							% расширенные математические формулы
+\usepackage{tikz, pgfplots}						% создание графиков и векторной графики
+\usepackage{adjustbox}							% масштабирование и выравнивание объектов
+\usepackage{float}								% расширенное управление float-объектами
+\usepackage{url}								% корректное отображение URL
+\usepackage{csquotes}							% умные кавычки и цитирование
+\usepackage{lastpage}							% ссылка на номер последней страницы
+\usepackage{xassoccnt}							% ассоциированные счётчики
+\usepackage{booktabs}							% красивые горизонтальные линии
+\usepackage[%
+    backend=biber,
+    bibstyle=gost-numeric,						% стиль библиографии по ГОСТ
+    sorting=none
+]{biblatex}										% работа с библиографией
+%===================================================================================
+% Собственные команды
+\newcommand{\eline}{%	Конец строки
+	\vspace{\baselineskip}
+}
+
+\newcommand{\emptypage}{%	Пустая страница
+  	\newpage
+	\mbox{}
+	\newpage
+}
+
+\newcommand{\inspdf}[2]{%	% вставка pdg страниц
+  \clearpage
+  \thispagestyle{empty}
+  \newgeometry{margin=0pt}
+  \noindent\includegraphics[page=#2,width=0.99\textwidth]{#1}
+  \restoregeometry
+  \clearpage
+}
+
+%===================================================================================
+% Настройка параметров оформления
+\setcounter{secnumdepth}{5}		% глубина нумерации разделов
+
+\setcounter{tocdepth}{4}		% глубина содержание ((1=section, 2=subsection, 3=subsubsection, 4=paragraph, 5=subparagraph)
+
+\setlength{\parindent}{1.25cm}	% отступ первой строки
+
+\hypersetup{				% офрмление ссылок
+    colorlinks=true,		% false: ссылки в цветных прямоугольниках; true: цветные ссылки
+    linkcolor=black,		% цвет внутренних ссылок
+    filecolor=black,		% цвет ссылок на файлы
+    urlcolor=black,			% цвет URL-ссылок
+    citecolor=black,		% цвет ссылок на библиографию
+    linkbordercolor={0 0 0}	% цвет прямоугольников вокруг ссылок (чёрный)
+}
+
+%===================================================================================
+% Хуки и более тонкая настройка
+\AddToHook{cmd/subsection/before}{\clearpage} % Раздел с новой страницы
+\AddToHook{cmd/subsubsection/before}{\FloatBarrier} % Барьер для рисунков, таблиц перед подразделом
+
+% Сброс счетчиков внутри раздела
+\AtBeginDocument{%
+  \counterwithin{figure}{subsection}
+  \counterwithin{table}{subsection}
+  \counterwithin{lstlisting}{subsection}
+}
+
+%-----------------------------------------------------------------------------------
+% Оформление подписей к рисункам и таблицам с длинным тире
+\DeclareCaptionLabelSeparator{gost}{~---~}
+\captionsetup{labelsep=gost}
+
+% Оформление подписей к рисункам
+\DeclareCaptionLabelFormat{gostfigure}{Рисунок #2}
+\captionsetup[figure]{justification=centering, labelformat=gostfigure, position=bottom}
+
+% Оформление подписей к листингам
+\DeclareCaptionLabelFormat{custlisting}{Листинг #2}
+\captionsetup[lstlisting]{justification=raggedright, labelformat=custlisting, position=top}
+
+% Оформление подписей к таблицам
+\DeclareCaptionLabelFormat{gosttable}{Таблица #2}
+\captionsetup[table]{justification=raggedright, labelformat=gosttable, position=top}
+
+% Оформление нумерации списка источников
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+
+%===================================================================================
+% Оформление структурных элементов (глава, пунктов, приложений, ...)
+%-----------------------------------------------------------------------------------
+% Приложение
+\titleformat{\section}
+    [block]								% форма
+    {\filcenter\bfseries\normalsize}	% формат полностью
+    {ПРИЛОЖЕНИЕ \thesection}			% метка
+    {0.5em}								% отступ от метки
+    {}									% код перед телом
+
+% Приложение с названием \appendX
+\renewcommand{\thesection}{\Asbuk{section}}
+\newcommand{\appendX}[1]{%
+    \stepcounter{appendXcount}%
+    \setcounter{figure}{0}
+    \setcounter{table}{0}
+    \setcounter{lstlisting}{0}
+    \clearpage
+    \section{#1}%
+}
+
+% Приложеним без названия \appendXn
+\newcommand{\appendXn}{%
+    \stepcounter{appendXcount}%
+    \setcounter{figure}{0}%
+    \setcounter{table}{0}%
+    \setcounter{lstlisting}{0}%
+    \clearpage
+    \section{\hspace{-0.5pt}}%
+}
+
+%-----------------------------------------------------------------------------------
+% Структурный элемент, не попадающий в содержание
+\newcommand{\hidedstructel}[1]{%
+    \clearpage
+    \section*{#1}%
+}
+
+% Структурный элемент
+\newcommand{\structel}[1]{%
+    \hidedstructel{#1}
+    \addcontentsline{toc}{section}{#1}%
+}
+%-----------------------------------------------------------------------------------
+% Оформление раздела
+\titleformat{\subsection}[hang]						% hang -- после название раздела с новой строки, runin -- на той же
+  {\normalfont\fontsize{18}{21}\bfseries\centering}	% (21 = 14 * 1.5 === полуторный интервал)
+  {\thesubsection}
+  {0.5em}											% расстояние между № и названием
+  {}				
+\titlespacing\subsection{\parindent}{\parskip}{1.5ex}	% отступы заголовка
+\renewcommand{\thesubsection}{\arabic{subsection}}		% Оформление нумерации разделов
+% Раздел \subsection{}
+
+%-----------------------------------------------------------------------------------
+% Оформление подраздела
+\titleformat{\subsubsection}[hang]
+  {\bfseries\normalsize}	% стиль заголовка
+  {\thesubsubsection}		% как отображается номер секции
+  {0.5em}					% отступ между номером и названием
+  {}						% код перед названием (например, "§ ")
+
+% Подраздел \subsubsection{}
+
+%-----------------------------------------------------------------------------------
+% Оформление пункта
+\titleformat{\paragraph}[hang]
+  {\bfseries\normalsize}
+  {\theparagraph}
+  {0.5em}
+  {}
+\titlespacing\paragraph{\parindent}{1ex}{1ex} % Настройка отступов (слева, сверху, снизу)
+% Пункт \paragraph{}
+
+% Оформление подпункта
+\titleformat{\subparagraph}[hang]
+  {\bfseries\normalsize}
+  {\thesubparagraph}
+  {0.5em}
+  {}
+\titlespacing\subparagraph{\parindent}{1ex}{1ex}
+% Подпункт \subparagraph{}
+
+%===================================================================================
+% Оформление списков
+% Общие параметры для списков
+\setlist{
+    topsep=0pt,					% отступ сверху и снизу списка
+    partopsep=0pt,				% то же самое
+    %leftmargin=0pt,			% отступ слева
+    labelsep=0pt,				% отступ метки
+    align=left,					% выравнивание метки
+    listparindent=\parindent,	% отступ первой строки абзаца
+    itemsep=0pt,				% отступ между элементами
+    parsep=0pt					% отступ между абзацами и элементами
+}
+
+% Параметры для нумерованных списков
+\setlist[enumerate]{
+    label={\arabic*)},
+    labelwidth=-0.5em,	% ширина маркера
+    labelsep=0.5em,	% расстояние между маркером и текстом
+    leftmargin=1.25cm
+}
+
+% Параметры для ненумерованного списка
+\setlist[itemize]{
+    label=---~,		% длинное тире
+    labelwidth=-0.5em,	% ширина маркера
+    labelsep=0.25em,	% расстояние между маркером и текстом
+    leftmargin=1.25cm
+}
+
+% Параметры для буквенного списка
+\AddEnumerateCounter*{\asbuk}{\c@asbuk}{7}
+\newlist{asblist}{enumerate}{2}
+\setlist[asblist]{
+    label={\asbuk*)},
+	labelwidth=-0.5em,	% ширина маркера
+    labelsep=0.5em,	% расстояние между маркером и текстом
+    leftmargin=1.25cm
+}
+
+%===================================================================================
+% Оформление рисунков
+
+\graphicspath{{img/}} % Директория по умолчанию
+
+% Рисунок в разделе
+\NewDocumentCommand{\Fig}{ O{1} m m }{% [размер] файл/label подпись
+    \counterwithin{figure}{subsection}%
+    \begin{figure}[!htbp]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}
+        \label{fig:#2}
+    \end{figure}
+}
+% \Fig[0.8]{label01}{Подпись}
+
+% Рисунок со сквозной нумерацией
+\NewDocumentCommand{\GlobalFig}{ O{1} m m }{%
+    \counterwithout{figure}{subsection}%
+    \counterwithout{figure}{section}%
+    \begin{figure}[!htbp]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}
+        \label{fig:#2}
+    \end{figure}
+}
+%\GlobalFig{label02}{Подпись}
+
+% Рисунок в приложении
+\NewDocumentCommand{\AppendixFig}{ O{1} m m }{%
+    \counterwithin{figure}{section}%
+    \begin{figure}[!htbp]
+        \centering
+        \includegraphics[width=#1\textwidth]{#2}
+        \caption{#3}
+        \label{fig:#2}
+    \end{figure}
+}
+% \AppendixFig{label03}{Подпись}
+
+%===================================================================================
+% Оформление листинга
+
+% Общий стиль
+\RequirePackage[listings]{tcolorbox}
+\tcbuselibrary{listings,breakable,minted,skins}
+% Уменьшаем размер номеров строк (FancyVerbLine используется minted'ом)
+\renewcommand\theFancyVerbLine{\scriptsize\arabic{FancyVerbLine}}
+\tcbset{
+  mylisting base/.style={
+    enhanced,
+    before skip=10pt,
+    arc=0mm,
+    boxrule=1pt,
+	enlarge top by=1.8ex, % опустить рамку с кодом
+    listing only,
+    listing engine=minted,
+    minted options={
+      linenos,
+      xleftmargin=5pt,
+      breaklines=true,
+      fontsize=\small\ttfamily,
+      numbersep=1.5mm,
+      style=bw
+    },
+    colback=white,
+    colframe=black,
+    breakable,
+    title={\strut \tcbtitletext}, % только плейсхолдер
+    attach boxed title to top left,
+    boxed title style={
+      enhanced,
+      sharp corners,
+      boxrule=0pt,
+      boxsep=0pt,
+      left=0pt,
+      right=0pt,
+      top=0pt,
+      bottom=0pt
+    },
+    top=0pt,
+    bottom=0pt,
+    coltitle=black,
+    colbacktitle=white,
+    overlay first={
+      \draw[line width=.5pt] (frame.south west)--(frame.south east);
+    },
+    overlay middle={
+      \draw[line width=.5pt] (frame.south west)--(frame.south east);
+      \draw[line width=.5pt] (frame.north west)--(frame.north east);
+      \node[anchor=south west,inner sep=0pt] at (frame.north west)
+          {Продолжение листинга \thetcbcounter};
+    },
+    overlay last={
+      \draw[line width=.5pt] (frame.north west)--(frame.north east);
+      \node[anchor=south west,inner sep=0pt] at (frame.north west)
+          {Продолжение листинга \thetcbcounter};
+    }
+  }
+}
+
+\newtcbinputlisting[% язык файл label подпись
+  auto counter,
+  number within=subsection
+]{\Code}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #4},
+  label=lst:#3
+}
+% \Code[java]{code/main.java}{L1}{Пример простой функции}
+
+\newtcbinputlisting[
+  auto counter
+]{\GlobalCode}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #4},
+  label=lst:#3
+}
+% \GlobalCode[java]{code/main.java}{L1}{Пример простой функции}
+
+\newtcbinputlisting[
+  auto counter,
+  number within=section
+]{\AppendixCode}[4][]{
+  mylisting base,
+  minted language=#1,
+  listing file={#2},
+  title={\strut Листинг \thetcbcounter{} --- #4},
+  label=lst:#3
+}
+% \AppendixCode[java]{code/main.java}{L1}{Пример простой функции}
+
+%===================================================================================
+% Оформление таблиц
+% Для генерации таблиц использовать сайт https://tablesgenerator.com
+
+% Таблица в разделе
+\NewDocumentCommand{\Table}{ m m m }{% таблица label подпись
+    \counterwithin{table}{subsection}%
+    \begin{table}[!htbp]
+        \centering
+		\caption{#3}
+        #1
+        \label{tab:#2}
+    \end{table}
+}
+
+% Таблица со сквозной нумерацией
+\NewDocumentCommand{\GlobalTable}{ m m m }{%
+    \counterwithout{table}{subsection}%
+    \counterwithout{table}{section}%
+    \begin{table}[!htbp]
+        \centering
+		\caption{#3}
+        #1
+        \label{tab:#2}
+    \end{table}
+}
+
+% Таблица в приложении
+\NewDocumentCommand{\AppendixTable}{ m m m }{%
+    \counterwithin{table}{section}%
+    \begin{table}[!htbp]
+        \centering
+		\caption{#3}
+        #1
+        \label{tab:#2}
+    \end{table}
+}
+
+%-----------------------------------------------------------------------------------
+% Те же команды, но для длинных таблиц
+
+% Таблица в разделе
+\makeatletter
+\NewDocumentCommand{\TableL}{ m m m }{% colspec, label, caption
+    \counterwithin{table}{subsection}%
+    \begin{longtable}{#1}
+        \caption{#3}\label{tab:#2} \\
+        \endfirsthead
+
+        \multicolumn{\LT@cols}{@{}p{\linewidth}}%
+        {Продолжение таблицы \ref{tab:#2}}\\
+		\hline
+        \endhead
+}
+\makeatother
+
+
+% Таблица со сквозной нумерацией
+\makeatletter
+\NewDocumentCommand{\GlobalTableL}{ m m m }{% colspec, label, caption
+    \counterwithout{table}{subsection}%
+    \counterwithout{table}{section}%
+    \begin{longtable}{#1}
+        \caption{#3}\label{tab:#2} \\
+        \endfirsthead
+
+        \multicolumn{\LT@cols}{@{}p{\linewidth}}%
+        {Продолжение таблицы \ref{tab:#2}}\\
+		\hline
+        \endhead
+}
+\makeatother
+
+% Таблица в приложении
+\makeatletter
+\NewDocumentCommand{\AppendixTableL}{ m m m }{% colspec, label, caption
+    \counterwithin{table}{section}%
+    \begin{longtable}{#1}
+        \caption{#3}\label{tab:#2} \\
+        \endfirsthead
+
+        \multicolumn{\LT@cols}{@{}p{\linewidth}}% растягивает последнюю колонку
+        {Продолжение таблицы \ref{tab:#2}}\\
+		\hline
+        \endhead
+}
+\makeatother
+
+% Альтернатива, но прилется подбирать значение в ручную
+%\multicolumn{\LT@cols}{@{}l}{%
+%  \makebox[0pt][l]{%
+%	\hspace*{-\dimexpr10mm}%
+%	Продолжение таблицы \ref{tab:main}%
+%  }%
+%}\\
+
+%===================================================================================
+% Оформление математических формул
+% Для генерации формул использовать сайт https://latexeditor.lagrida.com
+
+% Формула в разделе
+\NewDocumentCommand{\Eq}{ m m }{% label формула
+    \counterwithin{equation}{subsection}%
+    \begin{equation}
+		\label{eq:#1}
+		#2
+    \end{equation}
+}
+% \Eq{f1}{E = mc^2}
+
+% Формула со сквозной нумерацией
+\NewDocumentCommand{\GlobalEq}{ m m }{%
+    \counterwithout{equation}{subsection}%
+    \counterwithout{equation}{section}%
+    \begin{equation}
+		\label{eq:#1}
+		#2
+    \end{equation}
+}
+% \GlobalEq{f1}{\int_0^\infty e^{-x^2} dx = \frac{\sqrt{\pi}}{2}}
+
+% Формула в приложении
+\NewDocumentCommand{\AppendixEq}{ m m }{%
+    \counterwithin{equation}{section}%
+    \begin{equation}
+		\label{eq:#1}
+		#2
+    \end{equation}
+}
+% \AppendixEq{f1}{a^2 + b^2 = c^2}
+
+%===================================================================================
+% Оформление списка литературы
+
+\addbibresource{bibliography.bib} % Файл со списком источников
+
+\newcommand{\showbib}{%
+    \structel{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}%
+    \printbibliography[heading=none]%
+}
+
+% отступы в источниках
+\defbibenvironment{bibliography}
+    {\list
+        {}
+        {\setlength{\leftmargin}{0pt}%
+         \setlength{\itemindent}{\parindent}%
+         \setlength{\itemsep}{0pt}%
+         \setlength{\parsep}{0pt}}}
+    {\endlist}
+    {\item
+     \printtext[labelnumberwidth]{%
+        \printfield{labelprefix}%
+        \printfield{labelnumber}%
+     }%
+     \hspace{0.5em}}
+
+%===================================================================================
+% Счётчики
+
+% Счётчик источников
+\newtotcounter{bibcount}
+\AtEveryBibitem{
+    \stepcounter{bibcount}%
+}
+
+% Счётчики таблиц
+\newtotcounter{tblcount}
+\DeclareAssociatedCounters{table}{tblcount}
+
+% Счётчики рисунков
+\newtotcounter{figcount}
+\DeclareAssociatedCounters{figure}{figcount}
+
+% Счётчик приложений
+\newtotcounter{appendXcount} % счётчик приложений
+
+%===================================================================================
+%===================================================================================
+
+% Шаблоны
+%-----------------------------------------------------------------------------------
+\iffalse
+% Шаблон рисунка
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth, angle=90]{img/filename}
+    \caption{Название рисунка}
+    \label{fig:example}
+\end{figure}
+%
+\fi
+
+%-----------------------------------------------------------------------------------
+\iffalse
+% Шаблон листинга
+\lstinputlisting[
+        language=C,
+        caption={Подпись},
+        label={lst:code01}
+    ]{code/file.c}
+%
+\fi
+
+\iffalse
+% Шаблон листинга (без файла)
+\begin{minted}[linenos,breaklines,style=algol_nu]{python}
+def hello():
+    print("Hello, world!")
+\end{minted}
+%
+\fi
+
+%-----------------------------------------------------------------------------------
+\iffalse
+% Шаблон таблицы
+\Table{
+\begin{tabular}{|l|l|ll|}
+\hline
+№ & \begin{tabular}[c]{@{}l@{}}Возможность\\ Многострочных фраз\end{tabular} & \multicolumn{1}{l|}{1}              & 2              \\ \hline
+? & 4543                                                                     & \multicolumn{2}{l|}{Тогда жизнь определенно удалась} \\ \hline
+\end{tabular}
+}{t1}{Пример таблицы в разделе}
+%
+\fi
+
+%-----------------------------------------------------------------------------------
+\iffalse
+% Шаблон длинной таблицы
+\AppendixTableL{|l|c|r|}{params}{Параметры системы}
+\hline
+№ & Параметр & Значение \\
+\hline
+1 & Скорость & 10 \\ \hline
+2 & Масса & 20 \\ \hline
+3 & Время & 30 \\ \hline
+4 & Давление & 40 \\ \hline
+5 & Температура & 50 \\ \hline
+% ... сколько угодно строк
+\end{longtable}
+%
+\fi
+%-----------------------------------------------------------------------------------
